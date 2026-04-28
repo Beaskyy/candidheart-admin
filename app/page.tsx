@@ -1,45 +1,40 @@
 "use client";
 
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { DashboardHeader } from "@/components/dashboard-header";
 import { StatsCards } from "@/components/stats-cards";
-import { UserGrowthChart } from "@/components/user-growth-chart";
-import { RevenueChart } from "@/components/revenue-chart";
-import { RecentUsersTable } from "@/components/recent-users-table";
-import { ActivityFeed } from "@/components/activity-feed";
-import { VerificationChart } from "@/components/verification-chart";
+import { SignupsChart } from "@/components/signups-chart";
+import { OnboardingChart } from "@/components/onboarding-chart";
+import { MessageVolumeChart } from "@/components/message-volume-chart";
+import { NeedsAttention } from "@/components/needs-attention";
+import { RecentActivity } from "@/components/recent-activity";
 
 export default function Home() {
   return (
-    <SidebarProvider>
+    <div className="flex min-h-screen bg-[#FCFBF7]">
       <AppSidebar />
-      <SidebarInset className="flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         <DashboardHeader />
-        <main className="flex-1 overflow-auto">
-          <div className="mx-auto max-w-[1400px] space-y-6 p-6">
+        <main className="flex-1 overflow-auto px-8 pb-8">
+          <div className="max-w-[1400px] space-y-5">
             {/* Stats Cards */}
             <StatsCards />
 
-            {/* Charts Row */}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-              <UserGrowthChart />
-              <RevenueChart />
+            {/* Charts Row - 3 columns */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <SignupsChart />
+              <OnboardingChart />
+              <MessageVolumeChart />
             </div>
 
-            {/* Table + Sidebar Row */}
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-              <div className="lg:col-span-2">
-                <RecentUsersTable />
-              </div>
-              <div className="space-y-6">
-                <VerificationChart />
-                <ActivityFeed />
-              </div>
+            {/* Bottom Row - Needs attention + Recent activity */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <NeedsAttention />
+              <RecentActivity />
             </div>
           </div>
         </main>
-      </SidebarInset>
-    </SidebarProvider>
+      </div>
+    </div>
   );
 }
