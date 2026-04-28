@@ -1,194 +1,68 @@
 "use client";
 
+import { useState } from "react";
 import {
   LayoutDashboard,
   Users,
-  Heart,
   ShieldCheck,
   CreditCard,
+  Heart,
   MessageSquare,
-  Settings,
-  HelpCircle,
-  LogOut,
-  ChevronDown,
-  Bell,
+  Smartphone,
+  CheckCircle2,
 } from "lucide-react";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarSeparator,
-} from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 
-const mainNavItems = [
-  {
-    title: "Dashboard",
-    icon: LayoutDashboard,
-    href: "/",
-    isActive: true,
-  },
-  {
-    title: "Users",
-    icon: Users,
-    href: "/users",
-    badge: "2.4k",
-  },
-  {
-    title: "Matches",
-    icon: Heart,
-    href: "/matches",
-  },
-  {
-    title: "Verification",
-    icon: ShieldCheck,
-    href: "/verification",
-    badge: "12",
-    badgeVariant: "destructive" as const,
-  },
-  {
-    title: "Subscriptions",
-    icon: CreditCard,
-    href: "/subscriptions",
-  },
-  {
-    title: "Messages",
-    icon: MessageSquare,
-    href: "/messages",
-  },
-];
-
-const secondaryNavItems = [
-  {
-    title: "Settings",
-    icon: Settings,
-    href: "/settings",
-  },
-  {
-    title: "Help Center",
-    icon: HelpCircle,
-    href: "/help",
-  },
+const navItems = [
+  { title: "Overview", icon: LayoutDashboard, href: "/", isActive: true },
+  { title: "Users & Profiles", icon: Users, href: "/users" },
+  { title: "Verification", icon: ShieldCheck, href: "/verification" },
+  { title: "Payments", icon: CreditCard, href: "/payments" },
+  { title: "Matchmaking", icon: Heart, href: "/matchmaking" },
+  { title: "Chat & Messaging", icon: MessageSquare, href: "/chat" },
+  { title: "Devices & Config", icon: Smartphone, href: "/devices" },
 ];
 
 export function AppSidebar() {
   return (
-    <Sidebar className="border-r border-sidebar-border">
-      <SidebarHeader className="px-6 py-5">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#C8102E]">
-            <Heart className="h-5 w-5 text-white fill-white" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-semibold tracking-tight text-foreground">
-              CandidHeart
-            </span>
-            <span className="text-[11px] text-muted-foreground">
-              Admin Panel
-            </span>
-          </div>
+    <aside className="hidden lg:flex flex-col w-[220px] min-h-screen bg-[#053560] text-white shrink-0">
+      {/* Branding */}
+      <div className="px-6 pt-7 pb-10">
+        <h1 className="text-[28px] font-bold text-[#F3F1E3]">CandidHeart</h1>
+        <small className="text-xs text-[#C8D7E7] font-medium">
+          Admin Console
+        </small>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 px-3 space-y-2">
+        {navItems.map((item) => (
+          <a
+            key={item.title}
+            href={item.href}
+            className={`flex items-center h-11 gap-3 px-4 py-2.5 border border-[#2A5376] rounded-[16px] text-sm font-medium transition-all duration-200 ${
+              item.isActive
+                ? "bg-[#F3F1E3] text-[#053560]"
+                : "text-[#F3F1E3] hover:text-white/90 hover:bg-white/5"
+            }`}
+          >
+            <span>{item.title}</span>
+          </a>
+        ))}
+      </nav>
+
+      {/* Live Status */}
+      <div className="px-5 pb-6 mt-auto">
+        <div className="space-y-1">
+          <p className="text-[11px] text-white/40 font-medium">Live status</p>
+          <p className="text-[15px] font-semibold text-white leading-tight">
+            4 systems healthy
+          </p>
+          <span className="inline-flex items-center gap-1 mt-1 rounded-full bg-emerald-500/15 px-2.5 py-1 text-[11px] font-medium text-emerald-400">
+            <CheckCircle2 className="h-3 w-3" />
+            No incidents
+          </span>
         </div>
-      </SidebarHeader>
-
-      <SidebarSeparator />
-
-      <SidebarContent className="px-3 py-2">
-        <SidebarGroup>
-          <SidebarGroupLabel className="px-3 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
-            Main Menu
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {mainNavItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={item.isActive}
-                    className={`rounded-lg px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ${
-                      item.isActive
-                        ? "bg-[#C8102E] text-white shadow-sm hover:bg-[#A60D25]"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                    }`}
-                  >
-                    <a href={item.href} className="flex items-center gap-3">
-                      <item.icon className="h-[18px] w-[18px]" />
-                      <span className="flex-1">{item.title}</span>
-                      {item.badge && (
-                        <Badge
-                          variant={item.badgeVariant === "destructive" ? "destructive" : "secondary"}
-                          className={`ml-auto h-5 px-1.5 text-[10px] font-semibold ${
-                            item.isActive
-                              ? "bg-white/20 text-white border-0"
-                              : item.badgeVariant === "destructive"
-                              ? "bg-red-100 text-red-600 border-0"
-                              : "bg-muted text-muted-foreground border-0"
-                          }`}
-                        >
-                          {item.badge}
-                        </Badge>
-                      )}
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <SidebarSeparator className="my-3" />
-
-        <SidebarGroup>
-          <SidebarGroupLabel className="px-3 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
-            Support
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {secondaryNavItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    className="rounded-lg px-3 py-2.5 text-[13px] font-medium text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground"
-                  >
-                    <a href={item.href} className="flex items-center gap-3">
-                      <item.icon className="h-[18px] w-[18px]" />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-
-      <SidebarFooter className="p-4">
-        <SidebarSeparator className="mb-4" />
-        <div className="flex items-center gap-3 rounded-lg bg-muted/50 p-3">
-          <Avatar className="h-9 w-9">
-            <AvatarImage src="" />
-            <AvatarFallback className="bg-[#C8102E] text-white text-xs font-semibold">
-              AD
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex flex-1 flex-col">
-            <span className="text-sm font-medium text-foreground">Admin</span>
-            <span className="text-[11px] text-muted-foreground">
-              admin@candidheart.com
-            </span>
-          </div>
-          <button className="rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
-            <LogOut className="h-4 w-4" />
-          </button>
-        </div>
-      </SidebarFooter>
-    </Sidebar>
+      </div>
+    </aside>
   );
 }

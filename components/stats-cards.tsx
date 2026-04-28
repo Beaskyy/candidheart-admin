@@ -1,98 +1,111 @@
 "use client";
 
-import { Users, Heart, ShieldCheck, TrendingUp, TrendingDown, DollarSign, ArrowUpRight, ArrowDownRight } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-
 const stats = [
   {
-    title: "Total Users",
-    value: "2,420",
-    change: "+12.5%",
-    trend: "up" as const,
-    icon: Users,
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-600",
-    description: "vs last month",
-  },
-  {
-    title: "Active Matches",
-    value: "186",
+    title: "Total users",
+    value: "24.8k",
     change: "+8.2%",
     trend: "up" as const,
-    icon: Heart,
-    iconBg: "bg-rose-50",
-    iconColor: "text-[#C8102E]",
-    description: "vs last month",
+    sparklineData: [3, 5, 4, 6, 5, 7, 6, 8],
+    sparklineColor: "#053560",
   },
   {
-    title: "Pending Verifications",
-    value: "12",
-    change: "-3.1%",
-    trend: "down" as const,
-    icon: ShieldCheck,
-    iconBg: "bg-amber-50",
-    iconColor: "text-amber-600",
-    description: "vs last month",
-  },
-  {
-    title: "Revenue",
-    value: "₦4.2M",
-    change: "+18.7%",
+    title: "Completed onboarding",
+    value: "81%",
+    change: "+3.4%",
     trend: "up" as const,
-    icon: DollarSign,
-    iconBg: "bg-emerald-50",
-    iconColor: "text-emerald-600",
-    description: "vs last month",
+    sparklineData: [4, 5, 6, 5, 7, 6, 8, 7],
+    sparklineColor: "#10B981",
+  },
+  {
+    title: "Open profiles",
+    value: "14.2k",
+    change: "+2.1%",
+    trend: "up" as const,
+    sparklineData: [3, 4, 5, 4, 6, 5, 7, 6],
+    sparklineColor: "#053560",
+  },
+  {
+    title: "Active matches",
+    value: "1,284",
+    change: "+67",
+    trend: "up" as const,
+    sparklineData: [4, 6, 5, 7, 6, 8, 7, 9],
+    sparklineColor: "#053560",
+  },
+  {
+    title: "Pending verification",
+    value: "128",
+    change: "+14",
+    trend: "up" as const,
+    sparklineData: [5, 6, 5, 7, 6, 8, 7, 8],
+    sparklineColor: "#D97706",
+  },
+  {
+    title: "Unread risk signals",
+    value: "06",
+    change: "-2",
+    trend: "down" as const,
+    sparklineData: [8, 7, 6, 7, 5, 6, 4, 5],
+    sparklineColor: "#053560",
   },
 ];
 
+function Sparkline({ data, color }: { data: number[]; color: string }) {
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const range = max - min || 1;
+  const width = 56;
+  const height = 20;
+  const points = data
+    .map((v, i) => {
+      const x = (i / (data.length - 1)) * width;
+      const y = height - ((v - min) / range) * height;
+      return `${x},${y}`;
+    })
+    .join(" ");
+
+  return (
+    <svg width={width} height={height} className="shrink-0">
+      <polyline
+        points={points}
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function StatsCards() {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
       {stats.map((stat) => (
-        <Card
+        <div
           key={stat.title}
-          className="group relative overflow-hidden border border-border/60 bg-card shadow-sm transition-all duration-300 hover:shadow-md hover:border-border"
+          className="rounded-xl border border-[#E5E7EB] bg-white px-4 py-4 space-y-2"
         >
-          <CardContent className="p-5">
-            <div className="flex items-start justify-between">
-              <div className="space-y-3">
-                <p className="text-[13px] font-medium text-muted-foreground">
-                  {stat.title}
-                </p>
-                <div className="flex items-baseline gap-2">
-                  <h3 className="text-2xl font-bold tracking-tight text-foreground">
-                    {stat.value}
-                  </h3>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span
-                    className={`inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-[11px] font-semibold ${
-                      stat.trend === "up"
-                        ? "bg-emerald-50 text-emerald-700"
-                        : "bg-red-50 text-red-700"
-                    }`}
-                  >
-                    {stat.trend === "up" ? (
-                      <ArrowUpRight className="h-3 w-3" />
-                    ) : (
-                      <ArrowDownRight className="h-3 w-3" />
-                    )}
-                    {stat.change}
-                  </span>
-                  <span className="text-[11px] text-muted-foreground">
-                    {stat.description}
-                  </span>
-                </div>
-              </div>
-              <div
-                className={`flex h-11 w-11 items-center justify-center rounded-xl ${stat.iconBg} transition-transform duration-300 group-hover:scale-110`}
-              >
-                <stat.icon className={`h-5 w-5 ${stat.iconColor}`} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          <p className="text-[11px] font-medium text-[#6B7280] leading-tight">
+            {stat.title}
+          </p>
+          <p className="text-[24px] font-bold text-[#1A1D21] leading-none tracking-tight">
+            {stat.value}
+          </p>
+          <div className="flex items-center justify-between gap-2 pt-0.5">
+            <span
+              className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+                stat.trend === "up"
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "bg-red-50 text-red-700"
+              }`}
+            >
+              {stat.change}
+            </span>
+            <Sparkline data={stat.sparklineData} color={stat.sparklineColor} />
+          </div>
+        </div>
       ))}
     </div>
   );
