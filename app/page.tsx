@@ -9,14 +9,16 @@ import { MessageVolumeChart } from "@/components/message-volume-chart";
 import { NeedsAttention } from "@/components/needs-attention";
 import { RecentActivity } from "@/components/recent-activity";
 
+import { SidebarProvider } from "@/components/ui/sidebar";
+
 export default function Home() {
   return (
-    <div className="flex min-h-screen bg-[#FCFBF7]">
+    <SidebarProvider>
       <AppSidebar />
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 bg-[#FCFBF7]">
         <DashboardHeader />
-        <main className="flex-1 overflow-auto px-8 pb-8">
-          <div className="max-w-[1400px] space-y-5">
+        <main className="flex-1 overflow-auto px-4 md:px-8 pb-8">
+          <div className="max-w-[1400px] mx-auto space-y-5">
             {/* Stats Cards */}
             <StatsCards />
 
@@ -35,6 +37,7 @@ export default function Home() {
           </div>
         </main>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
+

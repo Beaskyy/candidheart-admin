@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   LayoutDashboard,
   Users,
@@ -11,6 +10,8 @@ import {
   Smartphone,
   CheckCircle2,
 } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { useSidebar } from "@/components/ui/sidebar";
 
 const navItems = [
   { title: "Overview", icon: LayoutDashboard, href: "/", isActive: true },
@@ -23,8 +24,10 @@ const navItems = [
 ];
 
 export function AppSidebar() {
-  return (
-    <aside className="hidden lg:flex flex-col w-[220px] min-h-screen bg-[#053560] text-white shrink-0">
+  const { openMobile, setOpenMobile, isMobile } = useSidebar();
+
+  const SidebarContent = (
+    <div className="flex flex-col h-full bg-[#053560] text-white">
       {/* Branding */}
       <div className="px-6 pt-7 pb-10">
         <h1 className="text-[28px] font-bold text-[#F3F1E3]">CandidHeart</h1>
@@ -63,6 +66,26 @@ export function AppSidebar() {
           </span>
         </div>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <aside className="hidden lg:flex flex-col w-[236px] min-h-screen bg-[#053560] text-white shrink-0">
+        {SidebarContent}
+      </aside>
+
+      {/* Mobile Sidebar */}
+      <Sheet open={openMobile} onOpenChange={setOpenMobile}>
+        <SheetContent side="left" className="p-0 w-[280px] bg-[#053560] border-none [&>button]:text-white">
+          <SheetHeader className="sr-only">
+            <SheetTitle>Navigation Menu</SheetTitle>
+            <SheetDescription>Access the admin dashboard navigation</SheetDescription>
+          </SheetHeader>
+          {SidebarContent}
+        </SheetContent>
+      </Sheet>
+    </>
   );
 }
