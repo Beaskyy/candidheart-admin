@@ -9,10 +9,10 @@ export function DashboardHeader() {
       <div className="flex items-center gap-3">
         <SidebarTrigger className="md:hidden" />
         <div>
-          <h1 className="text-xl md:text-[22px] font-bold text-[#1A1D21] tracking-tight">
+          <h1 className="md:text-[34px] text-xl font-bold text-[#053560]">
             Platform Overview
           </h1>
-          <p className="hidden sm:block text-[13px] text-[#6B7280] mt-0.5">
+          <p className="hidden sm:block text-sm text-[#6F6457] mt-0.5">
             Health, growth, risk, and activity across the CandidHeart ecosystem.
           </p>
         </div>
