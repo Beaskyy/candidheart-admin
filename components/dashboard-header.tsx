@@ -2,6 +2,7 @@
 
 import { Search, Menu } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Input } from "./ui/input";
 
 export function DashboardHeader() {
   return (
@@ -21,11 +22,10 @@ export function DashboardHeader() {
       <div className="flex items-center gap-2 md:gap-3">
         {/* Search */}
         <div className="relative group hidden sm:block">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9CA3AF]" />
-          <input
+          <Input
             type="text"
             placeholder="Search users, payments, matches"
-            className="h-10 w-[180px] md:w-[280px] rounded-xl border border-[#E5E7EB] bg-white pl-10 pr-4 text-[13px] text-[#1A1D21] placeholder:text-[#9CA3AF] outline-none focus:border-[#053560] focus:ring-1 focus:ring-[#053560]/10 transition-all"
+            className="h-12 w-[180px] md:w-[320px] rounded-[18px] border border-[#E5E7EB] bg-white p-4 text-[13px] text-[#1A1D21] placeholder:text-[#9CA3AF] outline-none focus:border-[#053560] focus:ring-1 focus:ring-[#053560]/10 transition-all"
           />
         </div>
         
@@ -35,7 +35,7 @@ export function DashboardHeader() {
         </button>
 
         {/* Avatar */}
-        <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-[#053560] text-white text-[13px] font-semibold shrink-0">
+        <div className="flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-[#B05A35] text-white text-[13px] font-semibold shrink-0">
           CH
         </div>
       </div>
