@@ -16,12 +16,12 @@ export function OnboardingChart() {
   const maxVal = Math.max(...data.map((d) => d.value));
 
   return (
-    <div className="rounded-xl border border-[#E5E7EB] bg-white p-5">
+    <div className="rounded-[24px] border border-[#E7E0D4] bg-white p-5">
       <div className="mb-1">
-        <h3 className="text-[15px] font-semibold text-[#1A1D21]">
+        <h3 className="text-[20px] font-bold text-[#053560]">
           Onboarding completion
         </h3>
-        <p className="text-[12px] text-[#9CA3AF]">Last 30 days</p>
+        <p className="text-[13px] text-[#6F6457]">Last 30 days</p>
       </div>
       <div className="flex items-end justify-between h-[120px] mt-4 pr-6">
         {data.map((d, i) => (
@@ -35,7 +35,7 @@ export function OnboardingChart() {
           />
         ))}
       </div>
-      <p className="text-[13px] font-semibold text-[#6B7280] mt-3">61%</p>
+      <p className="text-xs font-semibold text-[#6F6457] mt-3">61%</p>
     </div>
   );
 }
