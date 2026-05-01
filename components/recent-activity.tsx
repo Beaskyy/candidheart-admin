@@ -2,7 +2,7 @@
 
 const activities = [
   {
-    color: "bg-emerald-500",
+    color: "bg-[#1F6B4F]",
     title: "Nina Ade approved for full identity",
     description: "Profile CH-2871 · onboarding complete · 11 mins ago",
   },
@@ -25,12 +25,12 @@ const activities = [
 
 export function RecentActivity() {
   return (
-    <div className="rounded-xl border border-[#E5E7EB] bg-white p-5">
+    <div className="rounded-[24px] border border-[#E7E0D4] bg-white p-5">
       <div className="mb-4">
-        <h3 className="text-[16px] font-bold text-[#1A1D21]">
+        <h3 className="text-[20px] font-bold text-[#053560]">
           Recent activity
         </h3>
-        <p className="text-[12px] text-[#6B7280] mt-0.5">
+        <p className="text-xs md:text-[13px] text-[#6F6457] mt-0.5">
           A single stream spanning accounts, payments, matches, and chat.
         </p>
       </div>
@@ -42,10 +42,10 @@ export function RecentActivity() {
               className={`mt-1.5 h-2.5 w-2.5 rounded-full shrink-0 ${activity.color}`}
             />
             <div className="min-w-0">
-              <p className="text-[13px] font-semibold text-[#1A1D21] leading-tight">
+              <p className="text-sm font-semibold text-[#053560]">
                 {activity.title}
               </p>
-              <p className="text-[12px] text-[#9CA3AF] mt-0.5">
+              <p className="text-[11px] md:text-xs text-[#6F6457] leading-4 mt-0.5">
                 {activity.description}
               </p>
             </div>
@@ -54,7 +54,7 @@ export function RecentActivity() {
       </div>
 
       <div className="mt-5">
-        <span className="inline-flex items-center rounded-md bg-[#FEF3C7] px-2.5 py-1 text-[11px] font-semibold text-[#D97706]">
+        <span className="inline-flex items-center rounded-full bg-[#F5ECE2] h-7 px-3 py-1.5 text-xs font-medium text-[#A7653D] border border-[#E9D0BE]">
           4 live issues
         </span>
       </div>
