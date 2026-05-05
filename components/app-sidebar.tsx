@@ -12,9 +12,10 @@ import {
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useSidebar } from "@/components/ui/sidebar";
+import { usePathname } from "next/navigation";
 
 const navItems = [
-  { title: "Overview", icon: LayoutDashboard, href: "/", isActive: true },
+  { title: "Overview", icon: LayoutDashboard, href: "/" },
   { title: "Users & Profiles", icon: Users, href: "/users" },
   { title: "Verification", icon: ShieldCheck, href: "/verification" },
   { title: "Payments", icon: CreditCard, href: "/payments" },
@@ -25,6 +26,12 @@ const navItems = [
 
 export function AppSidebar() {
   const { openMobile, setOpenMobile, isMobile } = useSidebar();
+  const pathname = usePathname();
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
 
   const SidebarContent = (
     <div className="flex flex-col h-full bg-[#053560] text-white">
@@ -38,19 +45,22 @@ export function AppSidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 space-y-2">
-        {navItems.map((item) => (
-          <a
-            key={item.title}
-            href={item.href}
-            className={`flex items-center h-11 gap-3 px-4 py-2.5 border border-[#2A5376] rounded-[16px] text-sm font-medium transition-all duration-200 ${
-              item.isActive
-                ? "bg-[#F3F1E3] text-[#053560]"
-                : "text-[#F3F1E3] hover:text-white/90 hover:bg-white/5"
-            }`}
-          >
-            <span>{item.title}</span>
-          </a>
-        ))}
+        {navItems.map((item) => {
+          const active = isActive(item.href);
+          return (
+            <a
+              key={item.title}
+              href={item.href}
+              className={`flex items-center h-11 gap-3 px-4 py-2.5 border border-[#2A5376] rounded-[16px] text-sm font-medium transition-all duration-200 ${
+                active
+                  ? "bg-[#F3F1E3] text-[#053560]"
+                  : "text-[#F3F1E3] hover:text-white/90 hover:bg-white/5"
+              }`}
+            >
+              <span>{item.title}</span>
+            </a>
+          );
+        })}
       </nav>
 
       {/* Live Status */}
