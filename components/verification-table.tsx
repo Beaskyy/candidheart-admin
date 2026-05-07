@@ -222,19 +222,19 @@ const statusBadgeConfig: Record<
 > = {
   open: {
     label: "open",
-    className: "bg-[#E3F2FD] text-[#1976D2] border-[#BBDEFB]",
+    className: "bg-[#E6EEF7] text-[#053560] border-[#C7D7EA]",
   },
   hibernate: {
     label: "hibernate",
-    className: "bg-[#FFF3E0] text-[#E65100] border-[#FFCC80]",
+    className: "bg-[#F5ECE2] text-[#A7653D] border-[#E9D0BE]",
   },
   dating: {
     label: "dating",
-    className: "bg-[#FCE4EC] text-[#C2185B] border-[#F8BBD0]",
+    className: "bg-[#F4E7EB] text-[#63203A] border-[#E6C8D3]",
   },
   blocked: {
     label: "blocked",
-    className: "bg-[#FFEBEE] text-[#C62828] border-[#EF9A9A]",
+    className: "bg-[#F4E7EB] text-[#63203A] border-[#E6C8D3]",
   },
 };
 
@@ -244,11 +244,11 @@ const premiumBadgeConfig: Record<
 > = {
   premium: {
     label: "premium",
-    className: "bg-[#FCE4EC] text-[#C2185B] border-[#F8BBD0]",
+    className: "bg-[#F4E7EB] text-[#63203A] border-[#E6C8D3]",
   },
   standard: {
     label: "standard",
-    className: "bg-[#F5F5F5] text-[#757575] border-[#E0E0E0]",
+    className: "bg-[#F5F0E8] text-[#6E6252] border-[#E7DED1]",
   },
 };
 
@@ -257,48 +257,48 @@ export function VerificationTable() {
 
   return (
     <>
-      <div className="rounded-[24px] border border-[#E9E4DB] bg-white overflow-hidden">
+      <div className="rounded-[24px] border border-[#E7E0D4] bg-white overflow-hidden">
         {/* Table Header */}
-        <div className="px-8 pt-7 pb-5">
-          <h2 className="text-[22px] font-bold text-[#053560]">Users</h2>
-          <p className="text-sm text-[#6F6457] mt-1">
+        <div className="px-6 pt-6">
+          <h2 className="text-xl font-bold text-[#053560]">Users</h2>
+          <p className="text-[13px] text-[#6F6457] my-1">
             Wide operator table with demographic, contact, and account-state fields for faster review.
           </p>
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto px-2">
+        <div className="overflow-x-auto pl-6">
           <table className="w-full">
             <thead>
-              <tr className="border-t border-[#F0EDE6]">
-                <th className="px-6 py-4 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
+              <tr className="border-b border-[#EEE7DC]">
+                <th className="py-1 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
                   Full name
                 </th>
-                <th className="px-4 py-4 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="py-1 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
                   Age
                 </th>
-                <th className="px-4 py-4 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="py-1 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
                   Sex
                 </th>
-                <th className="px-4 py-4 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="py-1 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
                   Stage
                 </th>
-                <th className="px-4 py-4 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="py-1 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
                   Status
                 </th>
-                <th className="px-4 py-4 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="py-1 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
                   Premium
                 </th>
-                <th className="px-4 py-4 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="py-1 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
                   Email
                 </th>
-                <th className="px-4 py-4 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="py-1 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
                   Phone
                 </th>
-                <th className="px-4 py-4 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="py-1 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
                   Location
                 </th>
-                <th className="px-4 py-4 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="py-1 text-left text-[12px] font-semibold text-[#6F6457] whitespace-nowrap">
                   Last active
                 </th>
               </tr>
@@ -314,18 +314,18 @@ export function VerificationTable() {
                     onClick={() => router.push(`/verification/${user.id}`)}
                     className="cursor-pointer transition-colors hover:bg-[#FAF8F3] group"
                   >
-                    <td className="px-6 py-5">
+                    <td className="py-5">
                       <span className="text-sm font-semibold text-[#053560] group-hover:text-[#053560]/80">
                         {user.fullName}
                       </span>
                     </td>
                     <td className="px-4 py-5">
-                      <span className="text-sm text-[#1A1D21]">
+                      <span className="text-sm text-[#6F6457]">
                         {user.age}
                       </span>
                     </td>
                     <td className="px-4 py-5">
-                      <span className="text-sm text-[#1A1D21]">
+                      <span className="text-sm text-[#6F6457]">
                         {user.sex}
                       </span>
                     </td>
@@ -336,35 +336,35 @@ export function VerificationTable() {
                     </td>
                     <td className="px-4 py-5">
                       <span
-                        className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-bold ${statusBadge.className}`}
+                        className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${statusBadge.className}`}
                       >
                         {statusBadge.label}
                       </span>
                     </td>
                     <td className="px-4 py-5">
                       <span
-                        className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-bold ${premiumBadge.className}`}
+                        className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${premiumBadge.className}`}
                       >
                         {premiumBadge.label}
                       </span>
                     </td>
                     <td className="px-4 py-5">
-                      <span className="text-sm text-[#6F6457]">
+                      <span className="text-sm text-[#6F6457] font-medium">
                         {user.email}
                       </span>
                     </td>
                     <td className="px-4 py-5">
-                      <span className="text-sm text-[#6F6457] whitespace-nowrap">
+                      <span className="text-sm text-[#6F6457] font-medium whitespace-nowrap">
                         {user.phone}
                       </span>
                     </td>
                     <td className="px-4 py-5">
-                      <span className="text-sm text-[#6F6457]">
+                      <span className="text-sm text-[#6F6457] font-medium">
                         {user.location}
                       </span>
                     </td>
                     <td className="px-4 py-5">
-                      <span className="text-sm text-[#6F6457] whitespace-nowrap">
+                      <span className="text-sm text-[#6F6457] font-medium whitespace-nowrap">
                         {user.lastActive}
                       </span>
                     </td>

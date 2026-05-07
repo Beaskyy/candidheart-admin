@@ -5,7 +5,7 @@ const reviewStats = [
     title: "Selfie pending",
     value: "18",
     change: "+3",
-    color: "#B05A35", // Orange/Brown
+    color: "#A7653D", // Orange/Brown
   },
   {
     title: "Doc mismatches",
@@ -42,19 +42,19 @@ export function VerificationReviewStats() {
       {reviewStats.map((stat) => (
         <div
           key={stat.title}
-          className="rounded-[24px] border border-[#E9E4DB] bg-white p-6 flex flex-col justify-between min-h-[140px]"
+          className="rounded-[24px] border border-[#E7E0D4] bg-white p-6 flex flex-col justify-between min-h-[124px]"
         >
           <div className="space-y-1">
-            <p className="text-sm font-medium text-[#6F6457]">
+            <p className="text-[13px] font-medium text-[#6F6457]">
               {stat.title}
             </p>
-            <h4 className="text-[32px] font-bold text-[#053560] leading-none">
+            <h4 className="text-[30px] font-bold text-[#053560] leading-none">
               {stat.value}
             </h4>
           </div>
           <div className="flex items-end justify-between pt-2">
             <span
-              className="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
+              className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium"
               style={{
                 backgroundColor: `${stat.color}14`,
                 color: stat.color,

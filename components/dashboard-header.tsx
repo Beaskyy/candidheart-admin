@@ -55,7 +55,7 @@ export function DashboardHeader() {
           <Input
             type="text"
             placeholder="Search users, payments, matches"
-            className="h-12 w-[180px] md:w-[320px] rounded-[18px] border border-[#E5E7EB] bg-white px-5 text-[14px] text-[#1A1D21] placeholder:text-[#9CA3AF] outline-none focus:border-[#053560] focus:ring-1 focus:ring-[#053560]/10 transition-all shadow-sm"
+            className="h-12 w-[180px] md:w-[320px] rounded-[18px] border border-[#E5E7EB] bg-white px-5 text-[14px] text-[#1A1D21] placeholder:text-[#978A7D] outline-none focus:border-[#E7E0D4] focus:ring-1 focus:ring-[#053560]/10 transition-all"
           />
         </div>
         
