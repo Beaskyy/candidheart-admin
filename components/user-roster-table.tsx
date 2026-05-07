@@ -89,7 +89,7 @@ const users: UserData[] = [
     age: 31,
     sex: "F",
     stage: "complete",
-    status: "open",
+    status: "dating",
     premium: "premium",
     email: "grace.nnaji@candidheart.app",
     phone: "+234 814 201 6628",
@@ -221,15 +221,19 @@ const statusBadgeConfig: Record<
 > = {
   open: {
     label: "open",
-    className: "bg-[#E8F5E9] text-[#2E7D32] border-[#A5D6A7]",
+    className: "bg-[#E6EEF7] text-[#053560] border-[#C7D7EA]",
   },
   hibernate: {
     label: "hibernate",
-    className: "bg-[#FFF3E0] text-[#E65100] border-[#FFCC80]",
+    className: "bg-[#F5ECE2] text-[#A7653D] border-[#E9D0BE]",
+  },
+  dating: {
+    label: "dating",
+    className: "bg-[#F4E7EB] text-[#63203A] border-[#E6C8D3]",
   },
   blocked: {
     label: "blocked",
-    className: "bg-[#FFEBEE] text-[#C62828] border-[#EF9A9A]",
+    className: "bg-[#F4E7EB] text-[#63203A] border-[#E6C8D3]",
   },
 };
 
@@ -239,11 +243,11 @@ const premiumBadgeConfig: Record<
 > = {
   premium: {
     label: "premium",
-    className: "bg-[#053560] text-white border-[#053560]",
+    className: "bg-[#F4E7EB] text-[#63203A] border-[#E6C8D3]",
   },
   standard: {
     label: "standard",
-    className: "bg-[#F0EDE6] text-[#6F6457] border-[#E0DBD1]",
+    className: "bg-[#F5F0E8] text-[#6E6252] border-[#E7DED1]",
   },
 };
 
@@ -261,11 +265,11 @@ export function UserRosterTable() {
 
   return (
     <>
-      <div className="rounded-[24px] border border-[#E9E4DB] bg-white overflow-hidden">
+      <div className="rounded-[24px] border border-[#E7E0D4] bg-white overflow-hidden">
         {/* Table Header */}
         <div className="px-6 pt-5 pb-3">
           <h2 className="text-xl font-bold text-[#053560]">User roster</h2>
-          <p className="text-xs text-[#6F6457] mt-1">
+          <p className="text-xs md:text-[13px] text-[#6F6457] mt-1">
             Wide operator table with demographic, contact, and account-state
             fields for faster review.
           </p>
@@ -275,35 +279,35 @@ export function UserRosterTable() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-t border-[#E9E4DB]">
-                <th className="px-6 py-3 text-left text-[11px] font-semibold text-[#6F6457] whitespace-nowrap">
+              <tr className="">
+                <th className="px-6 py-3 text-left text-xs font-semibold text-[#6F6457] whitespace-nowrap">
                   Full name
                 </th>
-                <th className="px-3 py-3 text-left text-[11px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-[#6F6457] whitespace-nowrap">
                   Age
                 </th>
-                <th className="px-3 py-3 text-left text-[11px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-[#6F6457] whitespace-nowrap">
                   Sex
                 </th>
-                <th className="px-3 py-3 text-left text-[11px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-[#6F6457] whitespace-nowrap">
                   Stage
                 </th>
-                <th className="px-3 py-3 text-left text-[11px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-[#6F6457] whitespace-nowrap">
                   Status
                 </th>
-                <th className="px-3 py-3 text-left text-[11px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-[#6F6457] whitespace-nowrap">
                   Premium
                 </th>
-                <th className="px-3 py-3 text-left text-[11px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-[#6F6457] whitespace-nowrap">
                   Email
                 </th>
-                <th className="px-3 py-3 text-left text-[11px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-[#6F6457] whitespace-nowrap">
                   Phone
                 </th>
-                <th className="px-3 py-3 text-left text-[11px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-[#6F6457] whitespace-nowrap">
                   Location
                 </th>
-                <th className="px-3 py-3 text-left text-[11px] font-semibold text-[#6F6457] whitespace-nowrap">
+                <th className="px-3 py-3 text-left text-xs font-semibold text-[#6F6457] whitespace-nowrap">
                   Last active
                 </th>
               </tr>
@@ -320,22 +324,22 @@ export function UserRosterTable() {
                     className="border-t border-[#F0EDE6] cursor-pointer transition-colors hover:bg-[#FAF8F3] group"
                   >
                     <td className="px-6 py-4">
-                      <span className="text-[13px] font-semibold text-[#053560] group-hover:text-[#053560]/80">
+                      <span className="text-sm font-semibold text-[#053560] group-hover:text-[#053560]/80">
                         {user.fullName}
                       </span>
                     </td>
                     <td className="px-3 py-4">
-                      <span className="text-[13px] text-[#1A1D21]">
+                      <span className="text-[13px] text-[#6F6457]">
                         {user.age}
                       </span>
                     </td>
                     <td className="px-3 py-4">
-                      <span className="text-[13px] text-[#1A1D21]">
+                      <span className="text-[13px] text-[#6F6457]">
                         {user.sex}
                       </span>
                     </td>
                     <td className="px-3 py-4">
-                      <span className="text-[13px] text-[#1A1D21]">
+                      <span className="text-[13px] text-[#6F6457]">
                         {user.stage}
                       </span>
                     </td>
@@ -354,22 +358,22 @@ export function UserRosterTable() {
                       </span>
                     </td>
                     <td className="px-3 py-4">
-                      <span className="text-[12px] text-[#6F6457]">
+                      <span className="text-[13px] font-medium text-[#6F6457]">
                         {user.email}
                       </span>
                     </td>
                     <td className="px-3 py-4">
-                      <span className="text-[12px] text-[#6F6457] whitespace-nowrap">
+                      <span className="text-[13px] font-medium text-[#6F6457] whitespace-nowrap">
                         {user.phone}
                       </span>
                     </td>
                     <td className="px-3 py-4">
-                      <span className="text-[12px] text-[#6F6457]">
+                      <span className="text-[13px] font-medium text-[#6F6457]">
                         {user.location}
                       </span>
                     </td>
                     <td className="px-3 py-4">
-                      <span className="text-[12px] text-[#6F6457] whitespace-nowrap">
+                      <span className="text-[13px] font-medium text-[#6F6457] whitespace-nowrap">
                         {user.lastActive}
                       </span>
                     </td>

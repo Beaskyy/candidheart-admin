@@ -42,7 +42,7 @@ function IndicatorBar({ color }: { color: string }) {
 
 export function UsersStatsCards() {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 bg-white border border-[#E7E0D4] rounded-[24px] md:p-6 p-4">
       {stats.map((stat) => (
         <div
           key={stat.title}
