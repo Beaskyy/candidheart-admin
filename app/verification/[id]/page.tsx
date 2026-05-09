@@ -136,7 +136,7 @@ export default function VerificationReviewPage() {
                 </div>
               </div>
 
-              {/* Column 3: Decision Panel */}
+              {/* Column 3: Decision Panel  */}
               <div className="lg:min-w-[396px] rounded-[24px] border border-[#E7E0D4] bg-white p-6 h-full flex flex-col justify-between">
                 <div className="mb-6">
                   <h3 className="text-xl font-bold text-[#053560] mb-1">
