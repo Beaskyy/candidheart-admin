@@ -36,10 +36,8 @@ export default function VerificationReviewPage() {
             <VerificationReviewStats />
 
             {/* Main Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-              <div className="lg:col-span-3">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    {/* Column 1: Uploaded Selfie */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              {/* Column 1: Uploaded Selfie */}
               <div className="h-full">
                 <div className="rounded-[24px] border border-[#E7E0D4] bg-white p-6 h-full flex flex-col">
                   <h3 className="text-xl font-bold text-[#053560] mb-1">
@@ -137,13 +135,9 @@ export default function VerificationReviewPage() {
                   </div>
                 </div>
               </div>
-              </div>
-                </div>
-              
 
-              <div className="lg:col-span-2">
-                {/* Column 3: Decision Panel */}
-              <div className=" rounded-[24px] border border-[#E7E0D4] bg-white p-6 h-full flex flex-col justify-between">
+              {/* Column 3: Decision Panel */}
+              <div className="lg:min-w-[396px] rounded-[24px] border border-[#E7E0D4] bg-white p-6 h-full flex flex-col justify-between">
                 <div className="mb-6">
                   <h3 className="text-xl font-bold text-[#053560] mb-1">
                     Decision panel
@@ -231,7 +225,6 @@ export default function VerificationReviewPage() {
                     </button>
                   </div>
                 </div>
-              </div>
               </div>
             </div>
           </div>
