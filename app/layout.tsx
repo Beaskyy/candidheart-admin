@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Baloo_2 } from "next/font/google";
 import "./globals.css";
+import QueryProvider from "@/components/query-provider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,7 +30,9 @@ export default function RootLayout({
       className={`${inter.variable} ${baloo.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
-        {children}
+        <QueryProvider>
+          {children}
+        </QueryProvider>
       </body>
     </html>
   );

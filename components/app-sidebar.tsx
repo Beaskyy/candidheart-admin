@@ -13,6 +13,7 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useSidebar } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const navItems = [
   { title: "Overview", icon: LayoutDashboard, href: "/" },
@@ -37,7 +38,9 @@ export function AppSidebar() {
     <div className="flex flex-col h-full bg-[#053560] text-white">
       {/* Branding */}
       <div className="px-6 pt-7 pb-10">
-        <h1 className="text-[28px] font-bold text-[#F3F1E3]">CandidHeart</h1>
+        <Link href="/">
+          <h1 className="text-[28px] font-bold text-[#F3F1E3]">CandidHeart</h1>
+        </Link>
         <small className="text-xs text-[#C8D7E7] font-medium">
           Admin Console
         </small>
