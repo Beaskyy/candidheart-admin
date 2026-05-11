@@ -1,19 +1,12 @@
 "use client";
 
-const data = [
-  { value: 60 },
-  { value: 75 },
-  { value: 65 },
-  { value: 85 },
-  { value: 70 },
-  { value: 90 },
-  { value: 55 },
-  { value: 80 },
-  { value: 100 },
-];
+import { useAdminAnalyticsTrends } from "@/hooks/use-admin-api";
 
 export function MessageVolumeChart() {
-  const maxVal = Math.max(...data.map((d) => d.value));
+  const { data: trends, isLoading } = useAdminAnalyticsTrends({});
+  
+  const chartData = trends?.message_volume_trend || [];
+  const maxVal = chartData.length > 0 ? Math.max(...chartData.map((d) => d.value)) : 100;
 
   return (
     <div className="rounded-[24px] border border-[#E7E0D4] bg-white p-5">
@@ -24,18 +17,27 @@ export function MessageVolumeChart() {
         <p className="text-[13px] text-[#6F6457]">Last 30 days</p>
       </div>
       <div className="flex items-end justify-between h-[120px] mt-4 pr-6">
-        {data.map((d, i) => (
-          <div
-            key={i}
-            className="w-[18px] rounded-[9px] transition-all duration-300"
-            style={{
-              height: `${(d.value / maxVal) * 100}%`,
-              backgroundColor: "#63203A",
-            }}
-          />
-        ))}
+        {isLoading ? (
+          <div className="w-full flex items-center justify-center h-full text-xs text-[#6F6457]">Loading...</div>
+        ) : chartData.length === 0 ? (
+          <div className="w-full flex items-center justify-center h-full text-xs text-[#6F6457]">No data available</div>
+        ) : (
+          chartData.map((d, i) => (
+            <div
+              key={i}
+              className="w-[18px] rounded-[9px] transition-all duration-300"
+              style={{
+                height: `${Math.max((d.value / maxVal) * 100, 5)}%`,
+                backgroundColor: "#63203A",
+              }}
+              title={`${d.date}: ${d.value}`}
+            />
+          ))
+        )}
       </div>
-      <p className="text-xs font-semibold text-[#6F6457] mt-3">124%</p>
+      <p className="text-xs font-semibold text-[#6F6457] mt-3">
+        {isLoading ? "..." : "124%"}
+      </p>
     </div>
   );
 }

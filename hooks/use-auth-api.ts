@@ -87,7 +87,7 @@ export const useEmailVerifyConfirm = (token: string) => {
   return useQuery({
     queryKey: ["email-verify", token],
     queryFn: async () => {
-      const { data } = await apiClient.get(`/auth/email/verify/`, { params: { token } });
+      const { data } = await apiClient.get(`auth/email/verify/`, { params: { token } });
       return data;
     },
     enabled: !!token,

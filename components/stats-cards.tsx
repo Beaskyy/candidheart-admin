@@ -1,49 +1,6 @@
 "use client";
 
-const stats = [
-  {
-    title: "Total users",
-    value: "24.8k",
-    change: "+8.2%",
-    trend: "up" as const,
-    sparklineColor: "#053560",
-  },
-  {
-    title: "Completed onboarding",
-    value: "81%",
-    change: "+3.4%",
-    trend: "up" as const,
-    sparklineColor: "#1F6B4F",
-  },
-  {
-    title: "Open profiles",
-    value: "14.2k",
-    change: "+2.1%",
-    trend: "up" as const,
-    sparklineColor: "#053560",
-  },
-  {
-    title: "Active matches",
-    value: "1,284",
-    change: "+67",
-    trend: "up" as const,
-    sparklineColor: "#63203A",
-  },
-  {
-    title: "Pending verification",
-    value: "128",
-    change: "+14",
-    trend: "up" as const,
-    sparklineColor: "#B05A35",
-  },
-  {
-    title: "Unread risk signals",
-    value: "06",
-    change: "-2",
-    trend: "down" as const,
-    sparklineColor: "#63203A",
-  },
-];
+import { useAdminAnalyticsOverview } from "@/hooks/use-admin-api";
 
 function IndicatorBar({ color }: { color: string }) {
   return (
@@ -55,6 +12,53 @@ function IndicatorBar({ color }: { color: string }) {
 }
 
 export function StatsCards() {
+  const { data: overview, isLoading } = useAdminAnalyticsOverview();
+
+  const stats = [
+    {
+      title: "Total users",
+      value: isLoading ? "..." : (overview?.total_users || 0).toLocaleString(),
+      change: isLoading ? "0%" : `${overview?.total_users_mom_pct > 0 ? "+" : ""}${overview?.total_users_mom_pct || 0}%`,
+      trend: (overview?.total_users_mom_pct || 0) >= 0 ? ("up" as const) : ("down" as const),
+      sparklineColor: "#053560",
+    },
+    {
+      title: "Completed onboarding",
+      value: isLoading ? "..." : `${Math.round(overview?.onboarding_completion_percentage || 0)}%`,
+      change: "+0%", // Not directly in API mom but we can keep static or calc
+      trend: "up" as const,
+      sparklineColor: "#1F6B4F",
+    },
+    {
+      title: "Open profiles",
+      value: isLoading ? "..." : (overview?.open_profiles || 0).toLocaleString(),
+      change: "+0%",
+      trend: "up" as const,
+      sparklineColor: "#053560",
+    },
+    {
+      title: "Active matches",
+      value: isLoading ? "..." : (overview?.active_matches || 0).toLocaleString(),
+      change: "+0",
+      trend: "up" as const,
+      sparklineColor: "#63203A",
+    },
+    {
+      title: "Pending verification",
+      value: isLoading ? "..." : (overview?.pending_verifications || 0).toLocaleString(),
+      change: "+0",
+      trend: "up" as const,
+      sparklineColor: "#B05A35",
+    },
+    {
+      title: "Unread risk signals",
+      value: isLoading ? "..." : (overview?.unread_risk_signals || 0).toLocaleString().padStart(2, '0'),
+      change: "0",
+      trend: "down" as const,
+      sparklineColor: "#63203A",
+    },
+  ];
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-4">
       {stats.map((stat) => (

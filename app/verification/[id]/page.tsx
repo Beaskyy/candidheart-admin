@@ -4,26 +4,55 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { DashboardHeader } from "@/components/dashboard-header";
 import { VerificationReviewStats } from "@/components/verification-review-stats";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import { useAdminUserDetail, useUpdateIdVerification } from "@/hooks/use-admin-api";
+import { toast } from "sonner";
 
 export default function VerificationReviewPage() {
   const params = useParams();
-  const userId = params.id;
+  const router = useRouter();
+  const userId = params.id as string;
+  
+  const { data: user, isLoading } = useAdminUserDetail(userId);
+  const updateMutation = useUpdateIdVerification();
 
-  // Placeholder data for Julian Heart (as seen in image)
-  const userData = {
-    name: "Julian Heart",
-    profileId: "CH-2081",
-    docType: "National ID card",
-    docStatus: "Ready for approval",
-    selfieConfidence: "94% similarity • liveness passed",
-    ocrResult: "Name and DOB matched profile",
-    riskNotes: "No prior escalations or conduct flags",
-    dob: "14 Aug 1996 • document valid",
-    liveness: "High • blink + pose check passed",
-    captured: "iPhone 14 Pro • uploaded 39 mins ago",
+  const handleDecision = (id_verified: boolean) => {
+    updateMutation.mutate(
+      { 
+        user_id: userId, 
+        id_verified, 
+        decision_reason: id_verified ? "Verified by admin." : "Rejected by admin." 
+      },
+      {
+        onSuccess: () => {
+          toast.success(`User verification ${id_verified ? "approved" : "rejected"}.`);
+          router.push("/users");
+        },
+        onError: () => {
+          toast.error("Failed to update verification status.");
+        }
+      }
+    );
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#FCFBF7]">
+        <p className="text-[#053560] font-bold">Loading verification details...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#FCFBF7]">
+        <p className="text-[#053560] font-bold">User not found.</p>
+      </div>
+    );
+  }
+
+  const v = user.verification || {};
 
   return (
     <SidebarProvider>
@@ -53,16 +82,20 @@ export default function VerificationReviewPage() {
                       Selfie upload
                     </span>
 
-                    <div className="relative w-[250px] h-[230px] mt-4">
-                      <Image
-                        src="/selfie.svg"
-                        alt="selfie"
-                        className="absolute object-cover object-center"
-                        fill
-                      />
+                    <div className="relative w-[250px] h-[230px] mt-4 rounded-xl overflow-hidden bg-gray-100">
+                      {user.main_image ? (
+                        <Image
+                          src={user.main_image}
+                          alt="selfie"
+                          className="absolute object-cover object-center"
+                          fill
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-gray-400">No selfie</div>
+                      )}
                     </div>
                     <p className="mt-4 text-sm font-semibold text-[#053560]">
-                      {userData.name} • front camera selfie
+                      {user.first_name} {user.last_name} • front camera selfie
                     </p>
                   </div>
 
@@ -72,7 +105,7 @@ export default function VerificationReviewPage() {
                         Liveness signal
                       </p>
                       <p className="text-sm text-[#053560]">
-                        {userData.liveness}
+                        {v.liveness_passed ? "High • liveness check passed" : "Pending / Failed"}
                       </p>
                     </div>
                     <div>
@@ -80,7 +113,7 @@ export default function VerificationReviewPage() {
                         Captured on
                       </p>
                       <p className="text-sm text-[#053560]">
-                        {userData.captured}
+                        {user.last_active ? new Date(user.last_active).toLocaleString() : "Unknown device"}
                       </p>
                     </div>
                   </div>
@@ -100,22 +133,25 @@ export default function VerificationReviewPage() {
 
                   <div className="bg-[#FCFBF7] border border-[#EEE7DC] rounded-[18px] p-6 mt-4">
                     <span className="flex justify-center items-center w-[116px] text-xs rounded-full bg-[#F5ECE2] border border-[#E9D0BE] px-3 py-1 text-xs font-medium whitespace-nowrap text-[#A7653D] h-7">
-                      National ID card
+                      {v.id_document_type || "ID Document"}
                     </span>
                     <div className="relative rounded-[20px] bg-[#F8F9FA] aspect-[4/3] flex items-center justify-center overflow-hidden mb-4 border border-[#EEE7DC] mt-4">
-                      {/* Mockup ID Card */}
-                      <div className="w-4/5 h-3/5 bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex gap-4">
-                        <div className="w-16 h-20 bg-[#D4C5B0]/30 rounded-md" />
-                        <div className="flex-1 space-y-2 py-1">
-                          <div className="h-2 w-full bg-[#E9E4DB] rounded" />
-                          <div className="h-2 w-3/4 bg-[#E9E4DB] rounded" />
-                          <div className="h-2 w-1/2 bg-[#E9E4DB] rounded" />
-                          <div className="h-2 w-full bg-[#E9E4DB] rounded" />
+                      {v.id_document_image ? (
+                        <Image src={v.id_document_image} alt="ID Document" fill className="object-contain" />
+                      ) : (
+                        <div className="w-4/5 h-3/5 bg-white rounded-lg shadow-sm border border-gray-200 p-4 flex gap-4">
+                          <div className="w-16 h-20 bg-[#D4C5B0]/30 rounded-md" />
+                          <div className="flex-1 space-y-2 py-1">
+                            <div className="h-2 w-full bg-[#E9E4DB] rounded" />
+                            <div className="h-2 w-3/4 bg-[#E9E4DB] rounded" />
+                            <div className="h-2 w-1/2 bg-[#E9E4DB] rounded" />
+                            <div className="h-2 w-full bg-[#E9E4DB] rounded" />
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                     <p className="text-sm font-semibold text-[#053560] text-center">
-                      National ID • front document scan
+                      {v.id_document_type || "ID"} • front document scan
                     </p>
                   </div>
 
@@ -124,13 +160,13 @@ export default function VerificationReviewPage() {
                       <p className="text-xs font-semibold text-[#6F6457] mb-1">
                         OCR full name
                       </p>
-                      <p className="text-sm text-[#053560]">{userData.name}</p>
+                      <p className="text-sm text-[#053560]">{v.id_full_name || "N/A"}</p>
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-[#6F6457] mb-1">
                         DOB extracted
                       </p>
-                      <p className="text-sm text-[#053560]">{userData.dob}</p>
+                      <p className="text-sm text-[#053560]">{v.id_dob || "N/A"}</p>
                     </div>
                   </div>
                 </div>
@@ -148,15 +184,15 @@ export default function VerificationReviewPage() {
                   </p>
 
                   <h2 className="text-[28px] font-bold text-[#053560] mb-2">
-                    {userData.name}
+                    {user.first_name} {user.last_name}
                   </h2>
 
                   <div className="flex flex-wrap gap-2 mb-10">
                     <span className="flex justify-center items-center rounded-full bg-[#F5ECE2] text-[#A7653D] border border-[#E9D0BE] px-3 py-1 text-xs font-medium h-7">
-                      ID pending
+                      {user.id_verified ? "ID Verified" : "ID Pending"}
                     </span>
                     <span className="flex justify-center items-center rounded-full bg-[#E4F2EA] text-[#1F6B4F] border border-[#B9DCCB] px-3 py-1 text-xs font-medium h-7">
-                      Selfie matched
+                      {v.selfie_matched ? "Selfie matched" : "Selfie mismatch"}
                     </span>
                   </div>
 
@@ -166,7 +202,7 @@ export default function VerificationReviewPage() {
                         Profile ID
                       </p>
                       <p className="text-sm text-[#053560]">
-                        {userData.profileId}
+                        CH-{user.id.toString().slice(-4).toUpperCase()}
                       </p>
                     </div>
                     <div>
@@ -174,7 +210,7 @@ export default function VerificationReviewPage() {
                         Document type
                       </p>
                       <p className="text-sm text-[#053560]">
-                        {userData.docType}
+                        {v.id_document_type || "N/A"}
                       </p>
                     </div>
                     <div>
@@ -182,7 +218,7 @@ export default function VerificationReviewPage() {
                         Document status
                       </p>
                       <p className="text-sm text-[#053560]">
-                        {userData.docStatus}
+                        {user.id_verified ? "Approved" : "Ready for approval"}
                       </p>
                     </div>
                     <div>
@@ -190,7 +226,7 @@ export default function VerificationReviewPage() {
                         Selfie confidence
                       </p>
                       <p className="text-sm text-[#053560]">
-                        {userData.selfieConfidence}
+                        {v.selfie_confidence ? `${Math.round(v.selfie_confidence * 100)}% similarity` : "N/A"}
                       </p>
                     </div>
                     <div>
@@ -198,7 +234,7 @@ export default function VerificationReviewPage() {
                         OCR result
                       </p>
                       <p className="text-sm text-[#053560]">
-                        {userData.ocrResult}
+                        {v.ocr_status || "N/A"}
                       </p>
                     </div>
                     <div>
@@ -206,7 +242,7 @@ export default function VerificationReviewPage() {
                         Risk notes
                       </p>
                       <p className="text-sm text-[#053560]">
-                        {userData.riskNotes}
+                        No prior escalations or conduct flags
                       </p>
                     </div>
                   </div>
@@ -214,13 +250,23 @@ export default function VerificationReviewPage() {
 
                 <div className="pt-10">
                   <div className="flex justify-center itemse-center gap-3 w-full">
-                    <button className="px-6 flex justify-center items-center rounded-full bg-[#E4F2EA] text-[#1F6B4F] border border-[#B9DCCB] py-3 text-xs font-medium hover:bg-[#E4F2EA] hover:text-[#1F6B4F] transition-all h-7 whitespace-nowrap w-[134px]">
-                      Approve document
+                    <button 
+                      disabled={updateMutation.isPending}
+                      onClick={() => handleDecision(true)}
+                      className="px-6 flex justify-center items-center rounded-full bg-[#E4F2EA] text-[#1F6B4F] border border-[#B9DCCB] py-3 text-xs font-medium hover:bg-[#E4F2EA]/80 transition-all h-7 whitespace-nowrap w-[134px] disabled:opacity-50"
+                    >
+                      {updateMutation.isPending ? "..." : "Approve document"}
                     </button>
-                    <button className="rounded-full bg-[#F4E7EB] text-[#63203A] border border-[#E6C8D3] py-3 text-xs flex justify-center items-center font-medium hover:bg-[#F4E7EB] hover:text-[#63203A] transition-all h-7 px-6 w-[60px]">
+                    <button 
+                      disabled={updateMutation.isPending}
+                      onClick={() => handleDecision(false)}
+                      className="rounded-full bg-[#F4E7EB] text-[#63203A] border border-[#E6C8D3] py-3 text-xs flex justify-center items-center font-medium hover:bg-[#F4E7EB]/80 transition-all h-7 px-6 w-[60px] disabled:opacity-50"
+                    >
                       Reject
                     </button>
-                    <button className="rounded-full bg-[#F5ECE2] text-[#A7653D] border border-[#E9D0BE] py-3 text-xs flex justify-center items-center font-medium hover:bg-[#F5ECE2] hover:text-[#A7653D] transition-all h-7 whitespace-nowrap px-6 w-[125px]">
+                    <button 
+                      className="rounded-full bg-[#F5ECE2] text-[#A7653D] border border-[#E9D0BE] py-3 text-xs flex justify-center items-center font-medium hover:bg-[#F5ECE2]/80 transition-all h-7 whitespace-nowrap px-6 w-[125px]"
+                    >
                       Request reupload
                     </button>
                   </div>

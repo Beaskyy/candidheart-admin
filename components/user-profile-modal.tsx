@@ -2,37 +2,11 @@
 
 import { X } from "lucide-react";
 import { useEffect } from "react";
-
-interface UserData {
-  id: number;
-  fullName: string;
-  age: number;
-  sex: string;
-  stage: string;
-  status: string;
-  premium: string;
-  email: string;
-  phone: string;
-  location: string;
-  lastActive: string;
-  // Extended profile data
-  faith: string;
-  goals: string;
-  education: string;
-  datingState: string;
-  jobTitle: string;
-  tribe: string;
-  wantsChildren: string;
-  relocationOpenness: string;
-  photoCount: number;
-  identityCheck: string;
-  healthProof: string;
-  photoReview: string;
-  premiumPayment: string;
-}
+import { useAdminUserDetail } from "@/hooks/use-admin-api";
+import { AdminUserListItem } from "@/types/api";
 
 interface UserProfileModalProps {
-  user: UserData | null;
+  user: AdminUserListItem | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -43,16 +17,13 @@ const statusBadgeStyles: Record<string, string> = {
   blocked: "bg-[#FFEBEE] text-[#C62828] border-[#EF9A9A]",
 };
 
-const premiumBadgeStyles: Record<string, string> = {
-  premium: "bg-[#053560] text-white border-[#053560]",
-  standard: "bg-[#F0EDE6] text-[#6F6457] border-[#E0DBD1]",
-};
-
 export function UserProfileModal({
-  user,
+  user: basicUser,
   isOpen,
   onClose,
 }: UserProfileModalProps) {
+  const { data: detail, isLoading } = useAdminUserDetail(basicUser?.id || "");
+
   // Prevent scroll when modal is open
   useEffect(() => {
     if (isOpen) {
@@ -76,14 +47,19 @@ export function UserProfileModal({
     return () => window.removeEventListener("keydown", handleEscape);
   }, [isOpen, onClose]);
 
-  if (!isOpen || !user) return null;
+  if (!isOpen || !basicUser) return null;
+
+  const displayUser = detail || basicUser;
+  const fullName = detail ? `${detail.first_name} ${detail.last_name}` : basicUser.name;
+  const status = displayUser.status.toLowerCase();
+  const isPremium = displayUser.is_premium;
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center lg:pl-[236px] p-4"
       role="dialog"
       aria-modal="true"
-      aria-label={`Profile for ${user.fullName}`}
+      aria-label={`Profile for ${fullName}`}
     >
       {/* Backdrop with opacity */}
       <div
@@ -100,7 +76,7 @@ export function UserProfileModal({
               Full profile dialog
             </p>
             <h2 className="md:text-[32px] text-[24px] font-bold text-[#053560]">
-              {user.fullName}
+              {isLoading ? "Loading..." : fullName}
             </h2>
           </div>
           <button
@@ -118,66 +94,62 @@ export function UserProfileModal({
           <div className="space-y-4 bg-[#FCFBF7] border border-[#E7E0D4] rounded-[24px] p-4 h-fit">
             {/* Primary Photo */}
             <div className="relative rounded-[20px] overflow-hidden bg-gradient-to-br from-[#F3EDE0] via-[#E9E5D9] to-[#D8D1C5] aspect-[4/5] h-[390px] w-full">
-              {/* Abstract profile shape */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative w-48 h-48">
-                  <div className="absolute w-44 h-44 rounded-full bg-[#8B9DAF]/60 top-4 left-2" />
-                  <div className="absolute w-24 h-24 rounded-full bg-[#4A2030]/70 top-0 right-4" />
-                  <div className="absolute w-32 h-32 rounded-full bg-[#053560]/50 bottom-0 left-6" />
+              {detail?.main_image ? (
+                 <img src={detail.main_image} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="relative w-48 h-48">
+                    <div className="absolute w-44 h-44 rounded-full bg-[#8B9DAF]/60 top-4 left-2" />
+                    <div className="absolute w-24 h-24 rounded-full bg-[#4A2030]/70 top-0 right-4" />
+                    <div className="absolute w-32 h-32 rounded-full bg-[#053560]/50 bottom-0 left-6" />
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Photo badges */}
               <div className="absolute top-4 left-4 flex items-center gap-2">
                 <span className="h-7 bg-white border border-[#E7E0D4] rounded-full px-3 py-1 text-xs font-medium text-[#053560]">
-                  {user.photoCount} approved photos
+                  {detail?.other_images?.length || 0} approved photos
                 </span>
-                {user.premium === "premium" && (
+                {isPremium && (
                   <span className="h-7 bg-[#F4E7EB] border border-[#E6C8D3] rounded-full px-3 py-1 text-xs font-medium text-[#63203A] ml-20">
                     Premium
                   </span>
                 )}
               </div>
 
-              {/* Photo label */}
-
               <div className="absolute bottom-0 left-0 h-[72px] bg-[#053560B8] w-full flex justify-center flex-col p-4">
                 <p className="text-sm font-semibold text-white">
                   Primary profile photo
                 </p>
-                <p className="text-xs text-white">Approved upload</p>
+                <p className="text-xs text-white">{detail?.verification?.id_verified ? "Approved upload" : "Pending review"}</p>
               </div>
             </div>
 
             {/* Additional Photos Grid */}
             <div className="grid grid-cols-3 gap-4">
-              {["Warm light", "Full body", "Traditional"].map(
-                (label, index) => (
+              {(detail?.other_images || ["", "", ""]).slice(0, 3).map(
+                (url, index) => (
                   <div
-                    key={label}
+                    key={index}
                     className="rounded-[24px] overflow-hidden bg-gradient-to-br from-[#B8C5D6] to-[#8B9DAF] aspect-square relative h-[116px] w-[96px]"
                   >
-                    {/* Small abstract shapes */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div
-                        className="w-10 h-10 rounded-full"
-                        style={{
-                          backgroundColor:
-                            index === 0
-                              ? "#053560"
-                              : index === 1
-                                ? "#4A2030"
-                                : "#053560",
-                          opacity: 0.6,
-                        }}
-                      />
-                    </div>
-                    <div className="absolute bottom-0 left-0 right-0 h-[72px] bg-[#053560B8] p-2">
-                      <p className="text-xs font-semibold text-white truncate">
-                        {label}
-                      </p>
-                      <p className="text-xs text-white/70 truncate">
-                        Approved upload
+                    {url ? (
+                      <img src={url} alt={`Other ${index}`} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div
+                          className="w-10 h-10 rounded-full"
+                          style={{
+                            backgroundColor: index === 0 ? "#053560" : index === 1 ? "#4A2030" : "#053560",
+                            opacity: 0.6,
+                          }}
+                        />
+                      </div>
+                    )}
+                    <div className="absolute bottom-0 left-0 right-0 h-[32px] bg-[#053560B8] p-2 flex items-center justify-center">
+                      <p className="text-[10px] font-semibold text-white truncate">
+                        Upload {index + 1}
                       </p>
                     </div>
                   </div>
@@ -211,119 +183,71 @@ export function UserProfileModal({
 
               {/* Status Badges */}
               <div className="flex flex-wrap gap-2 mb-5">
-                <span className="rounded-full border border-[#1F6B4F] bg-[#E4F2EA] px-3 py-1 text-xs font-medium text-[#1F6B4F]">
-                  Verified identity
-                </span>
-                {user.premium === "premium" && (
+                {displayUser.id_verified && (
+                  <span className="rounded-full border border-[#1F6B4F] bg-[#E4F2EA] px-3 py-1 text-xs font-medium text-[#1F6B4F]">
+                    Verified identity
+                  </span>
+                )}
+                {isPremium && (
                   <span className="rounded-full border border-[#E6C8D3] bg-[#F4E7EB] px-3 py-1 text-xs font-medium text-[#63203A]">
                     Premium
                   </span>
                 )}
                 <span
                   className={`rounded-full border px-3 py-1 text-[11px] font-semibold ${
-                    statusBadgeStyles[user.status] || statusBadgeStyles.open
+                    statusBadgeStyles[status] || statusBadgeStyles.open
                   }`}
                 >
-                  {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                  {status.charAt(0).toUpperCase() + status.slice(1)}
                 </span>
               </div>
 
               {/* Details Grid */}
               <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                 <div>
-                  <p className="text-xs text-[#6F6457] font-semibold">Faith</p>
+                  <p className="text-xs text-[#6F6457] font-semibold">Stage</p>
                   <p className="text-sm font-medium text-[#053560]">
-                    {user.faith}
+                    {displayUser.onboarding_stage}
                   </p>
                 </div>
                 <div>
                   <p className="text-xs text-[#6F6457] font-semibold">Status</p>
                   <p className="text-sm font-medium text-[#053560]">
-                    {user.status.charAt(0).toUpperCase() + user.status.slice(1)}{" "}
-                    •{" "}
-                    {user.status === "hibernate"
-                      ? "hibernating"
-                      : "not hibernating"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-[#6F6457] font-semibold">Goals</p>
-                  <p className="text-sm font-medium text-[#053560]">
-                    {user.goals}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-[#6F6457] font-semibold">
-                    Dating state
-                  </p>
-                  <p className="text-sm font-medium text-[#053560]">
-                    {user.datingState}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-[#6F6457] font-semibold">
-                    Education
-                  </p>
-                  <p className="text-sm font-medium text-[#053560]">
-                    {user.education}
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
                   </p>
                 </div>
                 <div>
                   <p className="text-xs text-[#6F6457] font-semibold">Location</p>
                   <p className="text-sm font-medium text-[#053560]">
-                    {user.location} • verified
+                    {displayUser.location || displayUser.country}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-[#6F6457] font-semibold">
+                    Sex
+                  </p>
+                  <p className="text-sm font-medium text-[#053560]">
+                    {displayUser.gender}
                   </p>
                 </div>
               </div>
+              
               <hr className="my-6 border-t border-[#E7E0D4]" />
+              
               <h3 className="text-sm font-bold text-[#053560] mb-3">
-                Additional details
+                Account Stats
               </h3>
               <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                 <div>
-                  <p className="text-xs text-[#6F6457] font-semibold">Sex</p>
+                  <p className="text-xs text-[#6F6457] font-semibold">Payments</p>
                   <p className="text-sm font-medium text-[#053560]">
-                    {user.sex === "F" ? "Female" : "Male"}
+                    {detail?.stats?.payment_count || 0} transactions
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-[#6F6457] font-semibold">
-                    Job title
-                  </p>
+                  <p className="text-xs text-[#6F6457] font-semibold">Matches</p>
                   <p className="text-sm font-medium text-[#053560]">
-                    {user.jobTitle}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-[#6F6457] font-semibold">
-                    Tribe / ethnic group
-                  </p>
-                  <p className="text-sm font-medium text-[#053560]">
-                    {user.tribe}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-[#6F6457] font-semibold">
-                    Wants children
-                  </p>
-                  <p className="text-sm font-medium text-[#053560]">
-                    {user.wantsChildren}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-[#6F6457] font-semibold">
-                    Relocation openness
-                  </p>
-                  <p className="text-sm font-medium text-[#053560]">
-                    {user.relocationOpenness}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-[#6F6457] font-semibold">
-                    Onboarding stage
-                  </p>
-                  <p className="text-sm font-medium text-[#053560]">
-                    {user.stage.charAt(0).toUpperCase() + user.stage.slice(1)}
+                    {detail?.stats?.match_count || 0} active matches
                   </p>
                 </div>
               </div>
@@ -344,31 +268,15 @@ export function UserProfileModal({
                     Identity check
                   </p>
                   <p className="text-sm font-medium text-[#053560]">
-                    {user.identityCheck}
+                    {detail?.verification?.id_verified ? "Complete • Verified" : "Pending review"}
                   </p>
                 </div>
                 <div>
                   <p className="text-xs text-[#6F6457] font-semibold">
-                    Health proof
+                    Premium state
                   </p>
                   <p className="text-sm font-medium text-[#053560]">
-                    {user.healthProof}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-[#6F6457] font-semibold">
-                    Photo review
-                  </p>
-                  <p className="text-sm font-medium text-[#053560]">
-                    {user.photoReview}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-[#6F6457] font-semibold">
-                    Premium payment
-                  </p>
-                  <p className="text-sm font-medium text-[#053560]">
-                    {user.premiumPayment}
+                    {isPremium ? "Active Premium" : "Standard Account"}
                   </p>
                 </div>
               </div>

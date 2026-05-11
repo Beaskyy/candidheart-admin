@@ -2,218 +2,8 @@
 
 import { useState } from "react";
 import { UserProfileModal } from "./user-profile-modal";
-
-interface UserData {
-  id: number;
-  fullName: string;
-  age: number;
-  sex: string;
-  stage: string;
-  status: string;
-  premium: string;
-  email: string;
-  phone: string;
-  location: string;
-  lastActive: string;
-  faith: string;
-  goals: string;
-  education: string;
-  datingState: string;
-  jobTitle: string;
-  tribe: string;
-  wantsChildren: string;
-  relocationOpenness: string;
-  photoCount: number;
-  identityCheck: string;
-  healthProof: string;
-  photoReview: string;
-  premiumPayment: string;
-}
-
-const users: UserData[] = [
-  {
-    id: 1,
-    fullName: "Julian Heart",
-    age: 29,
-    sex: "F",
-    stage: "complete",
-    status: "open",
-    premium: "premium",
-    email: "julian@candidheart.app",
-    phone: "+234 803 445 2210",
-    location: "Lagos",
-    lastActive: "12m ago",
-    faith: "Christian • Pentecostal",
-    goals: "Marriage in 1 year",
-    education: "BSc • Product Design",
-    datingState: "No active dating lock",
-    jobTitle: "Product designer",
-    tribe: "Yoruba",
-    wantsChildren: "Yes",
-    relocationOpenness: "Maybe",
-    photoCount: 3,
-    identityCheck: "Complete • selfie matched",
-    healthProof: "Genotype AA • verified",
-    photoReview: "3 uploads • all approved",
-    premiumPayment: "Active • renewal tracked",
-  },
-  {
-    id: 2,
-    fullName: "Esther Femi",
-    age: 26,
-    sex: "F",
-    stage: "photos",
-    status: "hibernate",
-    premium: "standard",
-    email: "esther.femi@candidheart.app",
-    phone: "+234 810 552 9931",
-    location: "Abuja",
-    lastActive: "1h ago",
-    faith: "Christian • Anglican",
-    goals: "Marriage in 2 years",
-    education: "MSc • Biochemistry",
-    datingState: "Paused dating",
-    jobTitle: "Research scientist",
-    tribe: "Igbo",
-    wantsChildren: "Yes",
-    relocationOpenness: "No",
-    photoCount: 2,
-    identityCheck: "Complete • selfie matched",
-    healthProof: "Genotype AS • verified",
-    photoReview: "2 uploads • all approved",
-    premiumPayment: "Not subscribed",
-  },
-  {
-    id: 3,
-    fullName: "Grace Nnaji",
-    age: 31,
-    sex: "F",
-    stage: "complete",
-    status: "dating",
-    premium: "premium",
-    email: "grace.nnaji@candidheart.app",
-    phone: "+234 814 201 6628",
-    location: "Enugu",
-    lastActive: "5m ago",
-    faith: "Christian • Catholic",
-    goals: "Marriage in 6 months",
-    education: "MBA • Finance",
-    datingState: "Active dating",
-    jobTitle: "Financial analyst",
-    tribe: "Igbo",
-    wantsChildren: "Yes",
-    relocationOpenness: "Yes",
-    photoCount: 4,
-    identityCheck: "Complete • selfie matched",
-    healthProof: "Genotype AA • verified",
-    photoReview: "4 uploads • all approved",
-    premiumPayment: "Active • renewal tracked",
-  },
-  {
-    id: 4,
-    fullName: "Mariam Bello",
-    age: 28,
-    sex: "F",
-    stage: "faith",
-    status: "open",
-    premium: "standard",
-    email: "mariam.bello@candidheart.app",
-    phone: "+234 802 118 4475",
-    location: "Kaduna",
-    lastActive: "18m ago",
-    faith: "Muslim • Sunni",
-    goals: "Marriage in 1 year",
-    education: "BEng • Civil Engineering",
-    datingState: "No active dating lock",
-    jobTitle: "Civil engineer",
-    tribe: "Hausa",
-    wantsChildren: "Yes",
-    relocationOpenness: "Maybe",
-    photoCount: 3,
-    identityCheck: "Complete • selfie matched",
-    healthProof: "Genotype AA • verified",
-    photoReview: "3 uploads • all approved",
-    premiumPayment: "Not subscribed",
-  },
-  {
-    id: 5,
-    fullName: "Daniel Obi",
-    age: 33,
-    sex: "M",
-    stage: "complete",
-    status: "blocked",
-    premium: "standard",
-    email: "daniel.obi@candidheart.app",
-    phone: "+234 809 300 1135",
-    location: "Port Harcourt",
-    lastActive: "2d ago",
-    faith: "Christian • Pentecostal",
-    goals: "Serious relationship",
-    education: "BSc • Computer Science",
-    datingState: "Account blocked",
-    jobTitle: "Software engineer",
-    tribe: "Igbo",
-    wantsChildren: "Maybe",
-    relocationOpenness: "Yes",
-    photoCount: 2,
-    identityCheck: "Incomplete • needs review",
-    healthProof: "Not submitted",
-    photoReview: "2 uploads • 1 flagged",
-    premiumPayment: "Not subscribed",
-  },
-  {
-    id: 6,
-    fullName: "Naomi Ade",
-    age: 27,
-    sex: "F",
-    stage: "preferences",
-    status: "open",
-    premium: "premium",
-    email: "naomi.ade@candidheart.app",
-    phone: "+234 816 904 2207",
-    location: "Ibadan",
-    lastActive: "9m ago",
-    faith: "Christian • Methodist",
-    goals: "Marriage in 1 year",
-    education: "BSc • Psychology",
-    datingState: "No active dating lock",
-    jobTitle: "HR manager",
-    tribe: "Yoruba",
-    wantsChildren: "Yes",
-    relocationOpenness: "Maybe",
-    photoCount: 3,
-    identityCheck: "Complete • selfie matched",
-    healthProof: "Genotype AA • verified",
-    photoReview: "3 uploads • all approved",
-    premiumPayment: "Active • renewal tracked",
-  },
-  {
-    id: 7,
-    fullName: "Samuel Udo",
-    age: 30,
-    sex: "M",
-    stage: "health",
-    status: "open",
-    premium: "standard",
-    email: "samuel.udo@candidheart.app",
-    phone: "+234 813 664 5090",
-    location: "Uyo",
-    lastActive: "34m ago",
-    faith: "Christian • Presbyterian",
-    goals: "Marriage in 2 years",
-    education: "BSc • Medicine",
-    datingState: "No active dating lock",
-    jobTitle: "Medical doctor",
-    tribe: "Ibibio",
-    wantsChildren: "Yes",
-    relocationOpenness: "No",
-    photoCount: 2,
-    identityCheck: "Complete • selfie matched",
-    healthProof: "Pending submission",
-    photoReview: "2 uploads • all approved",
-    premiumPayment: "Not subscribed",
-  },
-];
+import { useAdminUsers } from "@/hooks/use-admin-api";
+import { AdminUserListItem } from "@/types/api";
 
 const statusBadgeConfig: Record<
   string,
@@ -251,28 +41,44 @@ const premiumBadgeConfig: Record<
   },
 };
 
-// Stage badge styling - matches the "dating" label in the design
-const stageBadgeConfig: Record<string, string> = {
-  complete: "",
-  photos: "",
-  faith: "",
-  preferences: "",
-  health: "",
-};
+export function UserRosterTable({ search }: { search?: string }) {
+  const [page, setPage] = useState(1);
+  const { data: response, isLoading } = useAdminUsers({ page, search });
+  const [selectedUser, setSelectedUser] = useState<any | null>(null);
 
-export function UserRosterTable() {
-  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
+  const users = response?.results || [];
 
   return (
     <>
       <div className="rounded-[24px] border border-[#E7E0D4] bg-white overflow-hidden">
         {/* Table Header */}
-        <div className="px-6 pt-5 pb-3">
-          <h2 className="text-xl font-bold text-[#053560]">User roster</h2>
-          <p className="text-xs md:text-[13px] text-[#6F6457] mt-1">
-            Wide operator table with demographic, contact, and account-state
-            fields for faster review.
-          </p>
+        <div className="px-6 pt-5 pb-3 flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-[#053560]">User roster</h2>
+            <p className="text-xs md:text-[13px] text-[#6F6457] mt-1">
+              Wide operator table with demographic, contact, and account-state
+              fields for faster review.
+            </p>
+          </div>
+          
+          {/* Simple Pagination Controls */}
+          <div className="flex items-center gap-2">
+            <button 
+              disabled={page === 1 || isLoading}
+              onClick={() => setPage(p => Math.max(1, p - 1))}
+              className="px-3 py-1 text-xs font-semibold text-[#053560] border border-[#E7E0D4] rounded-lg disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <span className="text-xs font-bold text-[#6F6457]">Page {page} of {response?.total_pages || 1}</span>
+            <button 
+              disabled={page >= (response?.total_pages || 1) || isLoading}
+              onClick={() => setPage(p => p + 1)}
+              className="px-3 py-1 text-xs font-semibold text-[#053560] border border-[#E7E0D4] rounded-lg disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
 
         {/* Table */}
@@ -313,73 +119,91 @@ export function UserRosterTable() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => {
-                const statusBadge = statusBadgeConfig[user.status] || statusBadgeConfig.open;
-                const premiumBadge = premiumBadgeConfig[user.premium] || premiumBadgeConfig.standard;
+              {isLoading ? (
+                <tr>
+                  <td colSpan={10} className="px-6 py-10 text-center text-sm text-[#6F6457]">
+                    Loading user roster...
+                  </td>
+                </tr>
+              ) : users.length === 0 ? (
+                <tr>
+                  <td colSpan={10} className="px-6 py-10 text-center text-sm text-[#6F6457]">
+                    No users found.
+                  </td>
+                </tr>
+              ) : (
+                users.map((user: AdminUserListItem) => {
+                  const statusKey = user.status.toLowerCase();
+                  const statusBadge = statusBadgeConfig[statusKey] || statusBadgeConfig.open;
+                  const premiumKey = user.payment_plan.toLowerCase();
+                  const premiumBadge = premiumBadgeConfig[premiumKey] || premiumBadgeConfig.standard;
+                  const lastActiveDate = user.last_active ? new Date(user.last_active) : null;
+                  const timeAgo = lastActiveDate ? `${Math.floor((Date.now() - lastActiveDate.getTime()) / 60000)}m ago` : "N/A";
 
-                return (
-                  <tr
-                    key={user.id}
-                    onClick={() => setSelectedUser(user)}
-                    className="border-t border-[#F0EDE6] cursor-pointer transition-colors hover:bg-[#FAF8F3] group"
-                  >
-                    <td className="px-6 py-4">
-                      <span className="text-sm font-semibold text-[#053560] group-hover:text-[#053560]/80">
-                        {user.fullName}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4">
-                      <span className="text-[13px] text-[#6F6457]">
-                        {user.age}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4">
-                      <span className="text-[13px] text-[#6F6457]">
-                        {user.sex}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4">
-                      <span className="text-[13px] text-[#6F6457]">
-                        {user.stage}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4">
-                      <span
-                        className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${statusBadge.className}`}
-                      >
-                        {statusBadge.label}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4">
-                      <span
-                        className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${premiumBadge.className}`}
-                      >
-                        {premiumBadge.label}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4">
-                      <span className="text-[13px] font-medium text-[#6F6457]">
-                        {user.email}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4">
-                      <span className="text-[13px] font-medium text-[#6F6457] whitespace-nowrap">
-                        {user.phone}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4">
-                      <span className="text-[13px] font-medium text-[#6F6457]">
-                        {user.location}
-                      </span>
-                    </td>
-                    <td className="px-3 py-4">
-                      <span className="text-[13px] font-medium text-[#6F6457] whitespace-nowrap">
-                        {user.lastActive}
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
+                  return (
+                    <tr
+                      key={user.id}
+                      onClick={() => setSelectedUser(user)}
+                      className="border-t border-[#F0EDE6] cursor-pointer transition-colors hover:bg-[#FAF8F3] group"
+                    >
+                      <td className="px-6 py-4">
+                        <span className="text-sm font-semibold text-[#053560] group-hover:text-[#053560]/80">
+                          {user.first_name} {user.last_name}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4">
+                        <span className="text-[13px] text-[#6F6457]">
+                          {user.age}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4">
+                        <span className="text-[13px] text-[#6F6457]">
+                          {user.gender?.charAt(0).toUpperCase()}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4">
+                        <span className="text-[13px] text-[#6F6457]">
+                          {user.onboarding_stage}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4">
+                        <span
+                          className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${statusBadge.className}`}
+                        >
+                          {statusBadge.label}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4">
+                        <span
+                          className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-semibold ${premiumBadge.className}`}
+                        >
+                          {premiumBadge.label}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4">
+                        <span className="text-[13px] font-medium text-[#6F6457]">
+                          {user.email}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4">
+                        <span className="text-[13px] font-medium text-[#6F6457] whitespace-nowrap">
+                          {user.phone_number}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4">
+                        <span className="text-[13px] font-medium text-[#6F6457]">
+                          {user.location || user.country}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4">
+                        <span className="text-[13px] font-medium text-[#6F6457] whitespace-nowrap">
+                          {timeAgo}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>

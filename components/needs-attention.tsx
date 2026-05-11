@@ -1,29 +1,39 @@
 "use client";
 
-const items = [
-  {
-    label: "Pending ID reviews",
-    labelColor: "bg-[#F5ECE2] text-[#A7653D] border-[#E9D0BE]",
-    description: "18 profiles waiting on selfie or document confirmation",
-  },
-  {
-    label: "Flagged photos",
-    labelColor: "bg-[#F4E7EB] text-[#63203A] border-[#E6C8D3]",
-    description: "11 uploads need moderator approval or rejection",
-  },
-  {
-    label: "Failed premium verification",
-    labelColor: "bg-[#F5ECE2] text-[#A7653D] border-[#E9D0BE]",
-    description: "7 payments require webhook or tx_ref investigation",
-  },
-  {
-    label: "Stale push token refresh",
-    labelColor: "bg-[#FCFBF7] text-[#053560] border-[#EEE7DC]",
-    description: "4 device groups have expiring access tokens",
-  },
-];
+import { useAdminAnalyticsOverview } from "@/hooks/use-admin-api";
 
 export function NeedsAttention() {
+  const { data: overview, isLoading } = useAdminAnalyticsOverview();
+
+  const items = [
+    {
+      label: "Pending ID reviews",
+      labelColor: "bg-[#F5ECE2] text-[#A7653D] border-[#E9D0BE]",
+      description: isLoading 
+        ? "Loading reviews..." 
+        : `${overview?.pending_verifications || 0} profiles waiting on selfie or document confirmation`,
+    },
+    {
+      label: "Flagged photos",
+      labelColor: "bg-[#F4E7EB] text-[#63203A] border-[#E6C8D3]",
+      description: isLoading 
+        ? "Checking flags..." 
+        : `${overview?.unread_risk_signals || 0} uploads need moderator approval or rejection`,
+    },
+    {
+      label: "Failed premium verification",
+      labelColor: "bg-[#F5ECE2] text-[#A7653D] border-[#E9D0BE]",
+      description: isLoading 
+        ? "Verifying payments..." 
+        : `${overview?.premium_payments_summary?.total_failed_payment || 0} payments require webhook or tx_ref investigation`,
+    },
+    {
+      label: "Stale push token refresh",
+      labelColor: "bg-[#FCFBF7] text-[#053560] border-[#EEE7DC]",
+      description: "4 device groups have expiring access tokens", // No direct API field, keeping static
+    },
+  ];
+
   return (
     <div className="rounded-[24px] border border-[#E7E0D4] bg-white p-6">
       <div className="mb-4">

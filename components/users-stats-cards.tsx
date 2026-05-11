@@ -1,35 +1,6 @@
 "use client";
 
-const stats = [
-  {
-    title: "Total users",
-    value: "24.8k",
-    change: "+8.2%",
-    trend: "up" as const,
-    barColor: "#053560",
-  },
-  {
-    title: "Verified users",
-    value: "18.6k",
-    change: "+4.0%",
-    trend: "up" as const,
-    barColor: "#1F6B4F",
-  },
-  {
-    title: "Open profiles",
-    value: "14.2k",
-    change: "+2.1%",
-    trend: "up" as const,
-    barColor: "#053560",
-  },
-  {
-    title: "Pending review",
-    value: "128",
-    change: "+14",
-    trend: "up" as const,
-    barColor: "#B05A35",
-  },
-];
+import { useAdminAnalyticsOverview } from "@/hooks/use-admin-api";
 
 function IndicatorBar({ color }: { color: string }) {
   return (
@@ -41,6 +12,39 @@ function IndicatorBar({ color }: { color: string }) {
 }
 
 export function UsersStatsCards() {
+  const { data: overview, isLoading } = useAdminAnalyticsOverview();
+
+  const stats = [
+    {
+      title: "Total users",
+      value: isLoading ? "..." : (overview?.total_users || 0).toLocaleString(),
+      change: isLoading ? "0%" : `${overview?.total_users_mom_pct > 0 ? "+" : ""}${overview?.total_users_mom_pct || 0}%`,
+      trend: (overview?.total_users_mom_pct || 0) >= 0 ? ("up" as const) : ("down" as const),
+      barColor: "#053560",
+    },
+    {
+      title: "Verified users",
+      value: isLoading ? "..." : (overview?.total_verified_users || 0).toLocaleString(),
+      change: isLoading ? "0%" : `${overview?.total_verified_users_mom_pct > 0 ? "+" : ""}${overview?.total_verified_users_mom_pct || 0}%`,
+      trend: (overview?.total_verified_users_mom_pct || 0) >= 0 ? ("up" as const) : ("down" as const),
+      barColor: "#1F6B4F",
+    },
+    {
+      title: "Open profiles",
+      value: isLoading ? "..." : (overview?.open_profiles || 0).toLocaleString(),
+      change: "+0%",
+      trend: "up" as const,
+      barColor: "#053560",
+    },
+    {
+      title: "Pending review",
+      value: isLoading ? "..." : (overview?.pending_verifications || 0).toLocaleString(),
+      change: "+0",
+      trend: "up" as const,
+      barColor: "#B05A35",
+    },
+  ];
+
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 bg-white border border-[#E7E0D4] rounded-[24px] md:p-6 p-4">
       {stats.map((stat) => (

@@ -24,7 +24,7 @@ export const useAdminUserDetail = (userId: string) => {
   return useQuery({
     queryKey: ["admin-user", userId],
     queryFn: async () => {
-      const { data } = await apiClient.get<AdminUserDetail>(`/admin/users/${userId}/`);
+      const { data } = await apiClient.get<AdminUserDetail>(`admin/users/${userId}/`);
       return data;
     },
     enabled: !!userId,
@@ -34,15 +34,15 @@ export const useAdminUserDetail = (userId: string) => {
 export const useUpdateIdVerification = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ userId, id_verified, decision_reason }: { userId: string, id_verified: boolean, decision_reason?: string }) => {
-      const { data } = await apiClient.patch(`/admin/users/${userId}/id-verification/`, {
+    mutationFn: async ({ user_id, id_verified, decision_reason }: { user_id: string, id_verified: boolean, decision_reason?: string }) => {
+      const { data } = await apiClient.patch(`admin/users/${user_id}/id-verification/`, {
         id_verified,
         decision_reason,
       });
       return data;
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["admin-user", variables.userId] });
+      queryClient.invalidateQueries({ queryKey: ["admin-user", variables.user_id] });
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
       queryClient.invalidateQueries({ queryKey: ["admin-analytics-overview"] });
     },

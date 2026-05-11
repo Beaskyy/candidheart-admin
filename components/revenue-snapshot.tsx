@@ -1,14 +1,16 @@
 "use client";
 
-const revenueData = [
-  { country: "NG", percentage: 72, color: "#053560" },
-  { country: "US", percentage: 12, color: "#B05A35" },
-  { country: "GB", percentage: 7, color: "#053560" },
-  { country: "CA", percentage: 5, color: "#B05A35" },
-  { country: "ZA", percentage: 4, color: "#053560" },
-];
+import { useAdminAnalyticsOverview } from "@/hooks/use-admin-api";
 
 export function RevenueSnapshot() {
+  const { data: overview, isLoading } = useAdminAnalyticsOverview();
+  
+  const revenueData = overview?.revenue_summary_by_country?.map((item, index) => ({
+    country: item.country_code,
+    percentage: Math.round(item.paying_users_pct),
+    color: index % 2 === 0 ? "#053560" : "#B05A35"
+  })) || [];
+
   return (
     <div className="rounded-[24px] border border-[#E9E4DB] bg-white p-8">
       <div className="mb-8">
@@ -19,22 +21,28 @@ export function RevenueSnapshot() {
       </div>
 
       <div className="space-y-6">
-        {revenueData.map((item) => (
-          <div key={item.country} className="flex items-center gap-4">
-            <div className="flex-1 bg-[#F0EDE6] h-4 rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full transition-all duration-1000 ease-out"
-                style={{
-                  width: `${item.percentage}%`,
-                  backgroundColor: item.color,
-                }}
-              />
+        {isLoading ? (
+          <p className="text-sm text-[#6F6457]">Loading revenue data...</p>
+        ) : revenueData.length === 0 ? (
+          <p className="text-sm text-[#6F6457]">No revenue data available.</p>
+        ) : (
+          revenueData.map((item) => (
+            <div key={item.country} className="flex items-center gap-4">
+              <div className="flex-1 bg-[#F0EDE6] h-4 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-1000 ease-out"
+                  style={{
+                    width: `${item.percentage}%`,
+                    backgroundColor: item.color,
+                  }}
+                />
+              </div>
+              <span className="text-[13px] font-semibold text-[#6F6457] w-12 text-right">
+                {item.country} {item.percentage}%
+              </span>
             </div>
-            <span className="text-[13px] font-semibold text-[#6F6457] w-12 text-right">
-              {item.country} {item.percentage}%
-            </span>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

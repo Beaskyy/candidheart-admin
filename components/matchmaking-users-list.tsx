@@ -1,49 +1,12 @@
 "use client";
 
-const matchmakingUsers = [
-  {
-    user: { name: "Amaka James", age: 29, location: "Lagos" },
-    partner: { name: "David Ojo", age: 31, location: "Abuja" },
-    status: "Chatting",
-    lastActivity: "18m ago",
-    owner: "Amina O.",
-    notes: "Good momentum. Review again only if thread cools off.",
-  },
-  {
-    user: { name: "Mariam Bello", age: 27, location: "Ibadan" },
-    partner: { name: "Samuel Duke", age: 30, location: "Lagos" },
-    status: "Chatting",
-    lastActivity: "4h ago",
-    owner: "Amina O.",
-    notes: "Warm exchange. No intervention needed yet.",
-  },
-  {
-    user: { name: "Favour Obi", age: 26, location: "Enugu" },
-    partner: { name: "John Ansa", age: 28, location: "Port Harcourt" },
-    status: "Chatting",
-    lastActivity: "1d ago",
-    owner: "Unassigned",
-    notes: "Light nudge tomorrow if there is no fresh reply.",
-  },
-  {
-    user: { name: "Esther Femi", age: 26, location: "Abuja" },
-    partner: { name: "Julian Hart", age: 29, location: "Lagos" },
-    status: "Chatting",
-    lastActivity: "2d ago",
-    owner: "Unassigned",
-    notes: "Recipient silent after invite. Watch closely for SLA risk.",
-  },
-  {
-    user: { name: "Naomi Cole", age: 30, location: "Benin" },
-    partner: { name: "David Ayo", age: 32, location: "Uyo" },
-    status: "Chatting",
-    lastActivity: "3d ago",
-    owner: "Sade K.",
-    notes: "Exclusivity reminder due soon. Prep a soft follow-up.",
-  },
-];
+import { useAdminMatches } from "@/hooks/use-admin-api";
+import { AdminMatch } from "@/types/api";
 
 export function MatchmakingUsersList() {
+  const { data: response, isLoading } = useAdminMatches({});
+  const matchmakingUsers = response?.results || [];
+
   return (
     <div className="rounded-[24px] border border-[#E9E4DB] bg-white overflow-hidden">
       <div className="px-8 pt-7 pb-5">
@@ -67,34 +30,50 @@ export function MatchmakingUsersList() {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#F0EDE6]">
-              {matchmakingUsers.map((item, index) => (
-                <tr key={index} className="group hover:bg-[#FAF8F3] transition-colors">
-                  <td className="px-4 py-5">
-                    <p className="text-[14px] font-bold text-[#053560]">{item.user.name}</p>
-                    <p className="text-[12px] text-[#6F6457]">{item.user.age} • {item.user.location}</p>
-                  </td>
-                  <td className="px-4 py-5">
-                    <p className="text-[14px] font-bold text-[#053560]">{item.partner.name}</p>
-                    <p className="text-[12px] text-[#6F6457]">{item.partner.age} • {item.partner.location}</p>
-                  </td>
-                  <td className="px-4 py-5 text-center">
-                    <span className="rounded-full bg-[#F3F1E3] text-[#053560] border border-[#DCD9C6] px-3 py-1 text-[11px] font-bold">
-                      {item.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-5 text-center">
-                    <span className="text-[13px] font-semibold text-[#053560]">{item.lastActivity}</span>
-                  </td>
-                  <td className="px-4 py-5 text-center">
-                    <span className="text-[13px] font-semibold text-[#053560]">{item.owner}</span>
-                  </td>
-                  <td className="px-4 py-5 max-w-[280px]">
-                    <p className="text-[13px] font-medium text-[#053560] leading-relaxed">
-                      {item.notes}
-                    </p>
+              {isLoading ? (
+                <tr>
+                  <td colSpan={6} className="px-4 py-10 text-center text-sm text-[#6F6457]">
+                    Loading matches...
                   </td>
                 </tr>
-              ))}
+              ) : matchmakingUsers.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-4 py-10 text-center text-sm text-[#6F6457]">
+                    No matches found.
+                  </td>
+                </tr>
+              ) : (
+                matchmakingUsers.map((item: AdminMatch) => (
+                  <tr key={item.id} className="group hover:bg-[#FAF8F3] transition-colors">
+                    <td className="px-4 py-5">
+                      <p className="text-[14px] font-bold text-[#053560]">{item.user1_email.split('@')[0]}</p>
+                      <p className="text-[12px] text-[#6F6457]">{item.user1_email}</p>
+                    </td>
+                    <td className="px-4 py-5">
+                      <p className="text-[14px] font-bold text-[#053560]">{item.user2_email.split('@')[0]}</p>
+                      <p className="text-[12px] text-[#6F6457]">{item.user2_email}</p>
+                    </td>
+                    <td className="px-4 py-5 text-center">
+                      <span className="rounded-full bg-[#F3F1E3] text-[#053560] border border-[#DCD9C6] px-3 py-1 text-[11px] font-bold capitalize">
+                        {item.status.toLowerCase()}
+                      </span>
+                    </td>
+                    <td className="px-4 py-5 text-center">
+                      <span className="text-[13px] font-semibold text-[#053560]">
+                        {new Date(item.updated_at).toLocaleDateString()}
+                      </span>
+                    </td>
+                    <td className="px-4 py-5 text-center">
+                      <span className="text-[13px] font-semibold text-[#053560]">Unassigned</span>
+                    </td>
+                    <td className="px-4 py-5 max-w-[280px]">
+                      <p className="text-[13px] font-medium text-[#053560] leading-relaxed">
+                        Match established. Monitoring interaction quality.
+                      </p>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

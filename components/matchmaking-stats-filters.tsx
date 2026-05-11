@@ -1,17 +1,19 @@
 "use client";
 
 import { useState } from "react";
-
-const stats = [
-  { label: "People dating", value: "128" },
-  { label: "Chatting", value: "84" },
-  { label: "Broken up", value: "19" },
-];
-
-const filters = ["All", "Dating", "Chatting", "Broken up"];
+import { useAdminAnalyticsOverview } from "@/hooks/use-admin-api";
 
 export function MatchmakingStatsFilters() {
   const [activeFilter, setActiveFilter] = useState("All");
+  const { data: overview, isLoading } = useAdminAnalyticsOverview();
+
+  const stats = [
+    { label: "People dating", value: isLoading ? "..." : (overview?.active_dates || 0).toLocaleString() },
+    { label: "Chatting", value: isLoading ? "..." : (overview?.active_matches || 0).toLocaleString() },
+    { label: "Broken up", value: "19" }, // Not in overview
+  ];
+
+  const filters = ["All", "Dating", "Chatting", "Broken up"];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6">

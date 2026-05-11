@@ -1,31 +1,6 @@
 "use client";
 
-const verificationStats = [
-  {
-    title: "Identity pending",
-    value: "18",
-    change: "+4",
-    color: "#A7653D", // Orange/Goldish
-  },
-  {
-    title: "Photo review",
-    value: "11",
-    change: "+2",
-    color: "#63203A", // Maroon/Red
-  },
-  {
-    title: "Health proofs",
-    value: "07",
-    change: "+1",
-    color: "#1F6B4F", // Green
-  },
-  {
-    title: "Conduct review",
-    value: "05",
-    change: "+1",
-    color: "#63203A", // Dark Red
-  },
-];
+import { useAdminAnalyticsOverview } from "@/hooks/use-admin-api";
 
 function IndicatorBar({ color }: { color: string }) {
   return (
@@ -37,9 +12,39 @@ function IndicatorBar({ color }: { color: string }) {
 }
 
 export function VerificationStats() {
+  const { data: overview, isLoading } = useAdminAnalyticsOverview();
+  const vs = overview?.verification_summary;
+
+  const stats = [
+    {
+      title: "Identity pending",
+      value: isLoading ? "..." : (vs?.total_identity_verified_pending || 0).toLocaleString(),
+      change: "+0",
+      color: "#A7653D",
+    },
+    {
+      title: "Photo review",
+      value: isLoading ? "..." : (overview?.unread_risk_signals || 0).toLocaleString(),
+      change: "+0",
+      color: "#63203A",
+    },
+    {
+      title: "Health proofs",
+      value: isLoading ? "..." : (vs?.total_pending_health_verification || 0).toLocaleString(),
+      change: "+0",
+      color: "#1F6B4F",
+    },
+    {
+      title: "Conduct review",
+      value: isLoading ? "..." : (overview?.unread_risk_signals || 0).toLocaleString(),
+      change: "+0",
+      color: "#63203A",
+    },
+  ];
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {verificationStats.map((stat) => (
+      {stats.map((stat) => (
         <div
           key={stat.title}
           className="rounded-[24px] border border-[#E9E4DB] bg-white p-6 flex flex-col justify-between min-h-[140px]"

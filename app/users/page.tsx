@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { AppSidebar } from "@/components/app-sidebar";
 import { UsersStatsCards } from "@/components/users-stats-cards";
 import { UserRosterTable } from "@/components/user-roster-table";
@@ -8,7 +10,7 @@ import { Input } from "@/components/ui/input";
 
 import { SidebarProvider, useSidebar } from "@/components/ui/sidebar";
 
-function UsersHeader() {
+function UsersHeader({ onSearch }: { onSearch: (val: string) => void }) {
   const { setOpenMobile } = useSidebar();
 
   return (
@@ -37,6 +39,7 @@ function UsersHeader() {
           <Input
             type="text"
             placeholder="Search users, payments, matches"
+            onChange={(e) => onSearch(e.target.value)}
             className="h-12 w-[180px] md:w-[320px] rounded-[18px] border border-[#E5E7EB] bg-white p-4 text-[13px] text-[#1A1D21] placeholder:text-[#9CA3AF] outline-none focus:border-[#053560] focus:ring-1 focus:ring-[#053560]/10 transition-all"
           />
         </div>
@@ -56,18 +59,20 @@ function UsersHeader() {
 }
 
 export default function UsersPage() {
+  const [search, setSearch] = useState("");
+
   return (
     <SidebarProvider>
       <AppSidebar />
       <div className="flex-1 flex flex-col min-w-0 bg-[#FCFBF7]">
-        <UsersHeader />
+        <UsersHeader onSearch={setSearch} />
         <main className="flex-1 overflow-auto px-4 md:px-8 pb-8">
           <div className="max-w-[1400px] mx-auto space-y-5">
             {/* Stats Cards */}
             <UsersStatsCards />
 
             {/* User Roster Table */}
-            <UserRosterTable />
+            <UserRosterTable search={search} />
           </div>
         </main>
       </div>
