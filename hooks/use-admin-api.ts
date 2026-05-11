@@ -14,7 +14,7 @@ export const useAdminUsers = (params: any) => {
   return useQuery({
     queryKey: ["admin-users", params],
     queryFn: async () => {
-      const { data } = await apiClient.get<AdminPagedResponse<AdminUserListItem>>("/v1/admin/users/", { params });
+      const { data } = await apiClient.get<AdminPagedResponse<AdminUserListItem>>("admin/users/", { params });
       return data;
     },
   });
@@ -24,7 +24,7 @@ export const useAdminUserDetail = (userId: string) => {
   return useQuery({
     queryKey: ["admin-user", userId],
     queryFn: async () => {
-      const { data } = await apiClient.get<AdminUserDetail>(`/v1/admin/users/${userId}/`);
+      const { data } = await apiClient.get<AdminUserDetail>(`/admin/users/${userId}/`);
       return data;
     },
     enabled: !!userId,
@@ -35,7 +35,7 @@ export const useUpdateIdVerification = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ userId, id_verified, decision_reason }: { userId: string, id_verified: boolean, decision_reason?: string }) => {
-      const { data } = await apiClient.patch(`/v1/admin/users/${userId}/id-verification/`, {
+      const { data } = await apiClient.patch(`/admin/users/${userId}/id-verification/`, {
         id_verified,
         decision_reason,
       });
@@ -53,7 +53,7 @@ export const useAdminTransactions = (params: any) => {
   return useQuery({
     queryKey: ["admin-transactions", params],
     queryFn: async () => {
-      const { data } = await apiClient.get<AdminPagedResponse<AdminTransaction>>("/v1/admin/transactions/", { params });
+      const { data } = await apiClient.get<AdminPagedResponse<AdminTransaction>>("admin/transactions/", { params });
       return data;
     },
   });
@@ -63,7 +63,7 @@ export const useAdminMatches = (params: any) => {
   return useQuery({
     queryKey: ["admin-matches", params],
     queryFn: async () => {
-      const { data } = await apiClient.get<AdminPagedResponse<AdminMatch>>("/v1/admin/matches/", { params });
+      const { data } = await apiClient.get<AdminPagedResponse<AdminMatch>>("admin/matches/", { params });
       return data;
     },
   });
@@ -73,7 +73,7 @@ export const useAdminAnalyticsOverview = () => {
   return useQuery({
     queryKey: ["admin-analytics-overview"],
     queryFn: async () => {
-      const { data } = await apiClient.get<AdminAnalyticsOverview>("/v1/admin/analytics/overview/");
+      const { data } = await apiClient.get<AdminAnalyticsOverview>("admin/analytics/overview/");
       return data;
     },
   });
@@ -83,7 +83,7 @@ export const useAdminAnalyticsTrends = (params: { start_date?: string, end_date?
   return useQuery({
     queryKey: ["admin-analytics-trends", params],
     queryFn: async () => {
-      const { data } = await apiClient.get<AdminAnalyticsTrends>("/v1/admin/analytics/trends/", { params });
+      const { data } = await apiClient.get<AdminAnalyticsTrends>("admin/analytics/trends/", { params });
       return data;
     },
   });

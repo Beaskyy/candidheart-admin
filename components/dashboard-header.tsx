@@ -1,14 +1,24 @@
 "use client";
 
-import { Search, Menu } from "lucide-react";
+import { Search, Menu, LogOut, User, Settings } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Input } from "./ui/input";
 import { usePathname } from "next/navigation";
+import { useLogout } from "@/hooks/use-auth-api";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function DashboardHeader() {
   const pathname = usePathname();
+  const logout = useLogout();
 
-  // Determine title and description based on route
+  // ... (title/description logic remains same)
   let title = "Platform Overview";
   let description = "Health, growth, risk, and activity across the CandidHeart ecosystem.";
 
@@ -64,10 +74,34 @@ export function DashboardHeader() {
           <Search className="h-5 w-5" />
         </button>
 
-        {/* Avatar */}
-        <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-[#B05A35] text-white text-[14px] font-semibold shrink-0 cursor-pointer hover:opacity-90 transition-opacity">
-          CH
-        </div>
+        {/* Avatar with Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-[#B05A35] text-white text-[14px] font-semibold shrink-0 cursor-pointer hover:opacity-90 transition-opacity">
+              CH
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56 mt-2">
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="cursor-pointer">
+              <User className="mr-2 h-4 w-4" />
+              <span>Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem 
+              className="cursor-pointer text-destructive focus:text-destructive" 
+              onClick={() => logout()}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );

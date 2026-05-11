@@ -6,7 +6,7 @@ export const useConversations = () => {
   return useQuery({
     queryKey: ["conversations"],
     queryFn: async () => {
-      const { data } = await apiClient.get<ConversationDto[]>("/v1/chat/conversations/");
+      const { data } = await apiClient.get<ConversationDto[]>("chat/conversations/");
       return data;
     },
   });
@@ -16,7 +16,7 @@ export const useCreateConversation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (otherUserId: string) => {
-      const { data } = await apiClient.post<ConversationDto>("/v1/chat/conversations/", {
+      const { data } = await apiClient.post<ConversationDto>("chat/conversations/", {
         other_user_id: otherUserId,
       });
       return data;
@@ -32,7 +32,7 @@ export const useMessages = (conversationId: string, page = 1) => {
     queryKey: ["messages", conversationId, page],
     queryFn: async () => {
       const { data } = await apiClient.get<PagedResponse<MessageDto>>(
-        `/v1/chat/conversations/${conversationId}/messages/`,
+        `/chat/conversations/${conversationId}/messages/`,
         { params: { page } }
       );
       return data;
@@ -46,7 +46,7 @@ export const useSendMessage = (conversationId: string) => {
   return useMutation({
     mutationFn: async (payload: { content: string; reply_to?: string | null }) => {
       const { data } = await apiClient.post<MessageDto>(
-        `/v1/chat/conversations/${conversationId}/messages/`,
+        `/chat/conversations/${conversationId}/messages/`,
         payload
       );
       return data;
@@ -62,7 +62,7 @@ export const useSyncMessages = (status: "pending" | "delivered" | "read", page =
   return useQuery({
     queryKey: ["sync-messages", status, page],
     queryFn: async () => {
-      const { data } = await apiClient.get<PagedResponse<MessageDto>>("/v1/chat/messages/", {
+      const { data } = await apiClient.get<PagedResponse<MessageDto>>("chat/messages/", {
         params: { status, page },
       });
       return data;
@@ -74,7 +74,7 @@ export const useUpdateMessageStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: { message_id: string; status: "delivered" | "read" }) => {
-      const { data } = await apiClient.post("/v1/chat/messages/status/", payload);
+      const { data } = await apiClient.post("chat/messages/status/", payload);
       return data;
     },
     onSuccess: (_, variables) => {
@@ -87,7 +87,7 @@ export const useUpdateMessageStatus = () => {
 export const useRegisterDevice = () => {
   return useMutation({
     mutationFn: async (fcmToken: string) => {
-      const { data } = await apiClient.post("/devices/register/", { fcm_token: fcmToken });
+      const { data } = await apiClient.post("devices/register/", { fcm_token: fcmToken });
       return data;
     },
   });

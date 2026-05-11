@@ -6,7 +6,7 @@ export const useProfile = () => {
   return useQuery({
     queryKey: ["profile-me"],
     queryFn: async () => {
-      const { data } = await apiClient.get<UserDto>("/v1/profile/me/");
+      const { data } = await apiClient.get<UserDto>("profile/me/");
       return data;
     },
   });
@@ -16,7 +16,7 @@ export const useUpdateProfileBasic = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: any) => {
-      const { data } = await apiClient.put("/api/profile/basic/", payload);
+      const { data } = await apiClient.put("api/profile/basic/", payload);
       return data;
     },
     onSuccess: () => {
@@ -29,7 +29,7 @@ export const useUpdateProfileBackground = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: any) => {
-      const { data } = await apiClient.put("/api/profile/background/", payload);
+      const { data } = await apiClient.put("api/profile/background/", payload);
       return data;
     },
     onSuccess: () => {
@@ -42,7 +42,7 @@ export const useUpdateProfileFaith = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: any) => {
-      const { data } = await apiClient.put("/api/profile/faith/", payload);
+      const { data } = await apiClient.put("api/profile/faith/", payload);
       return data;
     },
     onSuccess: () => {
@@ -55,7 +55,7 @@ export const useUpdateProfileGoals = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: any) => {
-      const { data } = await apiClient.put("/api/profile/goals/", payload);
+      const { data } = await apiClient.put("api/profile/goals/", payload);
       return data;
     },
     onSuccess: () => {
@@ -68,7 +68,7 @@ export const useUpdateProfileLanguages = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: { language_ids: string[] }) => {
-      const { data } = await apiClient.put("/api/profile/languages/", payload);
+      const { data } = await apiClient.put("api/profile/languages/", payload);
       return data;
     },
     onSuccess: () => {
@@ -81,7 +81,7 @@ export const useUpdateProfileLocation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: any) => {
-      const { data } = await apiClient.put("/api/profile/location/", payload);
+      const { data } = await apiClient.put("api/profile/location/", payload);
       return data;
     },
     onSuccess: () => {
@@ -94,7 +94,7 @@ export const useUpdateProfileOnboardingStage = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (onboardingStage: string) => {
-      const { data } = await apiClient.patch("/api/profile/onboarding-stage/", { onboarding_stage: onboardingStage });
+      const { data } = await apiClient.patch("api/profile/onboarding-stage/", { onboarding_stage: onboardingStage });
       return data;
     },
     onSuccess: () => {
@@ -107,7 +107,7 @@ export const useProfilePhotos = () => {
   return useQuery({
     queryKey: ["profile-photos"],
     queryFn: async () => {
-      const { data } = await apiClient.get<any[]>("/api/profile/photos/");
+      const { data } = await apiClient.get<any[]>("api/profile/photos/");
       return data;
     },
   });
@@ -117,7 +117,7 @@ export const useAddProfilePhoto = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: { image_url: string; is_headshot: boolean }) => {
-      const { data } = await apiClient.post("/api/profile/photos/", payload);
+      const { data } = await apiClient.post("api/profile/photos/", payload);
       return data;
     },
     onSuccess: () => {
@@ -143,7 +143,7 @@ export const useDeleteProfilePhoto = () => {
 export const useAcceptAgreement = () => {
   return useMutation({
     mutationFn: async (agreementType: string) => {
-      const { data } = await apiClient.post("/api/agreements/accept/", { agreement_type: agreementType });
+      const { data } = await apiClient.post("api/agreements/accept/", { agreement_type: agreementType });
       return data;
     },
   });

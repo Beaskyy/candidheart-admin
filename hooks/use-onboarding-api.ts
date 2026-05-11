@@ -6,7 +6,7 @@ export const useOnboardingConfig = () => {
   return useQuery({
     queryKey: ["onboarding-config"],
     queryFn: async () => {
-      const { data } = await apiClient.get<OnboardingConfig>("/v1/onboarding/config");
+      const { data } = await apiClient.get<OnboardingConfig>("onboarding/config/");
       return data;
     },
   });
@@ -16,7 +16,7 @@ export const useOnboardingStatus = () => {
   return useQuery({
     queryKey: ["onboarding-status"],
     queryFn: async () => {
-      const { data } = await apiClient.get<OnboardingStatus>("/v1/onboarding/status");
+      const { data } = await apiClient.get<OnboardingStatus>("onboarding/status/");
       return data;
     },
   });
@@ -26,7 +26,7 @@ export const useUpdateOnboardingIdentity = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: OnboardingIdentity) => {
-      const { data } = await apiClient.post("/v1/onboarding/identity", payload);
+      const { data } = await apiClient.post("onboarding/identity/", payload);
       return data;
     },
     onSuccess: () => {
@@ -39,7 +39,7 @@ export const useUpdateOnboardingHealth = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: OnboardingHealth) => {
-      const { data } = await apiClient.post("/v1/onboarding/health", payload);
+      const { data } = await apiClient.post("onboarding/health/", payload);
       return data;
     },
     onSuccess: () => {
@@ -52,7 +52,7 @@ export const useUpdateOnboardingHeritage = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: OnboardingHeritage) => {
-      const { data } = await apiClient.post("/v1/onboarding/heritage", payload);
+      const { data } = await apiClient.post("onboarding/heritage/", payload);
       return data;
     },
     onSuccess: () => {
@@ -65,7 +65,7 @@ export const useUpdateOnboardingFaith = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: OnboardingFaith) => {
-      const { data } = await apiClient.post("/v1/onboarding/faith", payload);
+      const { data } = await apiClient.post("onboarding/faith/", payload);
       return data;
     },
     onSuccess: () => {
@@ -78,7 +78,7 @@ export const useUpdateOnboardingGoals = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: OnboardingGoals) => {
-      const { data } = await apiClient.post("/v1/onboarding/goals", payload);
+      const { data } = await apiClient.post("onboarding/goals/", payload);
       return data;
     },
     onSuccess: () => {
@@ -91,7 +91,7 @@ export const useUpdateOnboardingDealBreakers = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: OnboardingDealBreakers) => {
-      const { data } = await apiClient.post("/v1/onboarding/dealbreakers", payload);
+      const { data } = await apiClient.post("onboarding/dealbreakers/", payload);
       return data;
     },
     onSuccess: () => {
@@ -104,7 +104,7 @@ export const useUpdateOnboardingPhotos = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: OnboardingPhotos) => {
-      const { data } = await apiClient.post("/v1/onboarding/photos", payload);
+      const { data } = await apiClient.post("onboarding/photos/", payload);
       return data;
     },
     onSuccess: () => {
@@ -117,7 +117,7 @@ export const useUpdateOnboardingTerms = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: { accepted_terms: boolean }) => {
-      const { data } = await apiClient.post("/v1/onboarding/terms", payload);
+      const { data } = await apiClient.post("onboarding/terms/", payload);
       return data;
     },
     onSuccess: () => {
@@ -131,7 +131,7 @@ export const useOnboardingIdScan = () => {
   return useMutation({
     mutationFn: async (payload: { face_url: string; id_type: string; document_url: string; profile_id?: string }) => {
       const { data } = await apiClient.post<{ verified: boolean; decision: string; reference_id?: string }>(
-        "/v1/onboarding/id-verification/scan",
+        "onboarding/id-verification/scan/",
         payload
       );
       return data;
@@ -146,7 +146,7 @@ export const useUpdateOnboardingEducation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payload: OnboardingEducation) => {
-      const { data } = await apiClient.post("/v1/onboarding/education", payload);
+      const { data } = await apiClient.post("onboarding/education/", payload);
       return data;
     },
     onSuccess: () => {

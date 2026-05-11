@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const API_BASE_URL = "/api";
+// Using a relative path for development with skipTrailingSlashRedirect enabled in next.config.ts.
+export const API_BASE_URL = "/api/v1/";
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
