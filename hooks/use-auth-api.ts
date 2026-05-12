@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
-import { AuthResponse } from "@/types/api";
+import { AuthResponse, AdminBootstrapResponse } from "@/types/api";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
@@ -134,6 +134,7 @@ export const usePresignUpload = () => {
   });
 };
 
+
 export const useLogout = () => {
   const router = useRouter();
   return () => {
@@ -143,4 +144,13 @@ export const useLogout = () => {
       router.push("login/");
     }
   };
+};
+
+export const useBootstrapAdmin = () => {
+  return useMutation({
+    mutationFn: async (payload: { email: string; password: string; phone_number: string }) => {
+      const { data } = await apiClient.post<AdminBootstrapResponse>("auth/bootstrap-admin/", payload);
+      return data;
+    },
+  });
 };

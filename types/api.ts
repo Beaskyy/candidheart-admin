@@ -342,3 +342,17 @@ export interface AdminAnalyticsTrends {
   onboarding_completion_trend: Array<{ date: string; value: number }>;
   message_volume_trend: Array<{ date: string; value: number }>;
 }
+
+export interface AdminBootstrapResponse {
+  email: string;
+  environment: string;
+  django_admin: {
+    id: number;
+    username: string;
+    created: boolean;
+  };
+  accounts_admin: {
+    id: string;
+    created: boolean;
+  };
+}

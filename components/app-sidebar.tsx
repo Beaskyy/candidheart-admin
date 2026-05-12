@@ -51,7 +51,7 @@ export function AppSidebar() {
         {navItems.map((item) => {
           const active = isActive(item.href);
           return (
-            <a
+            <Link
               key={item.title}
               href={item.href}
               className={`flex items-center h-11 gap-3 px-4 py-2.5 border border-[#2A5376] rounded-[16px] text-sm font-medium transition-all duration-200 ${
@@ -61,7 +61,7 @@ export function AppSidebar() {
               }`}
             >
               <span>{item.title}</span>
-            </a>
+            </Link>
           );
         })}
       </nav>
